@@ -1,0 +1,23 @@
+version: '3'
+services:
+
+  redis:
+    container_name: yanki_redis
+    image: redis:4-alpine
+    volumes:
+      - /var/lib/redis/data:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+    # run in persistent mode
+    command: redis-server --appendonly yes
+    restart: always
+
+  postgres:
+    container_name: yanki_db
+    image: postgres:12.3
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    env_file: .env

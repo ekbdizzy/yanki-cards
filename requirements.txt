@@ -6,3 +6,4 @@ requests==2.27.1
 environs==9.5.0
 psycopg2-binary==2.9.3
 markdown==3.3.6
+gunicorn==20.1.0

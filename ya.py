@@ -1,5 +1,6 @@
-import requests
 from environs import Env
+
+import requests
 
 
 def get_ya_token(oauth_token: str) -> dict:
@@ -8,7 +9,8 @@ def get_ya_token(oauth_token: str) -> dict:
     """
     iam_token_url = "https://iam.api.cloud.yandex.net/iam/v1/tokens"
     response = requests.post(
-        url=iam_token_url, json={"yandexPassportOauthToken": env('YA_OAUTH_TOKEN')}
+        url=iam_token_url,
+        json={"yandexPassportOauthToken": env('YA_OAUTH_TOKEN')},
     )
     response.raise_for_status()
     return response.json()
@@ -37,4 +39,10 @@ def translate_word(token: str, word: str, language_code: str = "ru") -> str:
 if __name__ == "__main__":
     env = Env()
     env.read_env()
-    print(translate_word(token=env('IAMTOKEN'), word="Decrease", language_code='ru'))
+    print(
+        translate_word(
+            token=env('IAMTOKEN'),
+            word="Decrease",
+            language_code='ru',
+        ),
+    )

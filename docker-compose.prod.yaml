@@ -30,6 +30,8 @@ services:
     command: gunicorn yanki_cards.wsgi --bind 0.0.0.0:8000
     ports:
       - "8000:8000"
+    volumes:
+      - .:/backend
     depends_on:
       - postgres
 
@@ -43,7 +45,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "80:8080"
+      - "80:80"
       - "443:443"
     volumes:
       - react_build:/var/www/react

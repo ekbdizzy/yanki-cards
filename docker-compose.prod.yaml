@@ -27,7 +27,7 @@ services:
     build:
       dockerfile: .Dockerfile
       context: .
-    command: gunicorn yanki_cards.wsgi --bind 0.0.0.0:8000
+    entrypoint: "wsgi-entrypoint.sh"
     ports:
       - "8000:8000"
     volumes:
@@ -45,7 +45,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "80:80"
+      - "80:8080"
       - "443:443"
     volumes:
       - react_build:/var/www/react

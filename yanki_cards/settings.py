@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'words',
+    'questions',
 ]
 
 REST_FRAMEWORK = {

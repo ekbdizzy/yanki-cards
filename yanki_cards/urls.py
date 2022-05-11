@@ -16,4 +16,5 @@ urlpatterns = [
         name='token_refresh',
     ),
     path('auth/', include('django.contrib.auth.urls')),
+    path('api/', include('questions.urls')),
 ]

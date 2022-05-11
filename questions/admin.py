@@ -17,7 +17,6 @@ class HintAdmin(admin.ModelAdmin):
 
 class HintInLine(admin.TabularInline):
     model = Hint
-    # raw_id_fields = ('text',)
     extra = 1
 
 

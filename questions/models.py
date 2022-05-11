@@ -5,9 +5,18 @@ from users.models import User
 
 class Theme(models.Model):
     """Questions may be sorted by theme.
-    This model is a list of themes for questions."""
+    This model is a list of themes for questions.
+    Users can create themes by himself.
+    User's created models are private."""
 
     title = models.CharField('Title', max_length=50)
+    is_private = models.BooleanField(default=True)
+    author = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='themes',
+        null=True,
+    )
 
     def __str__(self):
         return self.title

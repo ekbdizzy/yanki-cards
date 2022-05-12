@@ -9,7 +9,7 @@ class Theme(models.Model):
     Users can create themes by himself.
     User's created models are private."""
 
-    title = models.CharField('Title', max_length=50)
+    title = models.CharField('Title', max_length=50, unique=True)
     is_private = models.BooleanField(default=True)
     author = models.ForeignKey(
         to=User,
@@ -35,7 +35,7 @@ class Question(models.Model):
     )
     theme = models.ManyToManyField(
         to='Theme',
-        related_name='themes',
+        related_name='questions',
         verbose_name='Themes',
     )
 

@@ -1,4 +1,3 @@
-from rest_framework import permissions
 from rest_framework.generics import (
     CreateAPIView,
     ListCreateAPIView,
@@ -11,18 +10,12 @@ from rest_framework.permissions import (
 )
 
 from .models import Theme
+from .permissions import IsAuthor, IsPublicTheme
 from .serializers import (
     QuestionSerializer,
     ThemeDetailSerializer,
     ThemeSerializer,
 )
-
-
-class IsAuthor(permissions.BasePermission):
-    """Permission check for authority of theme."""
-
-    def has_object_permission(self, request, view, obj):
-        return obj.author == request.user
 
 
 class ThemeListView(ListCreateAPIView):
@@ -41,7 +34,7 @@ class ThemeListView(ListCreateAPIView):
 class ThemeDetailView(RetrieveUpdateDestroyAPIView):
     """Details of, update or delete private themes."""
 
-    permission_classes = [IsAuthenticated, IsAuthor]
+    permission_classes = [IsAuthenticated, IsAuthor | IsPublicTheme]
     serializer_class = ThemeDetailSerializer
     queryset = Theme.objects.all()
 

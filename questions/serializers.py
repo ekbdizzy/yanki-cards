@@ -5,12 +5,21 @@ from users.models import User
 from .models import Hint, Question, Theme
 
 
+class HintSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hint
+        fields = ('id', 'text', 'question_id')
+
+    question_id = serializers.IntegerField(write_only=True)
+
+
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('id', 'text', 'theme_id')
+        fields = ('id', 'text', 'theme_id', 'hints')
 
     theme_id = serializers.IntegerField(write_only=True)
+    hints = HintSerializer(many=True)
 
 
 class ThemeSerializer(serializers.ModelSerializer):
@@ -40,9 +49,3 @@ class ThemeDetailSerializer(ThemeSerializer):
 
     author = None
     questions = QuestionSerializer(many=True)
-
-
-class HintSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hint
-        fields = ('text', 'question')

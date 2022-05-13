@@ -9,9 +9,10 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 
-from .models import Question, Theme
+from .models import Hint, Question, Theme
 from .permissions import IsAuthor, IsPublicTheme
 from .serializers import (
+    HintSerializer,
     QuestionSerializer,
     ThemeDetailSerializer,
     ThemeSerializer,
@@ -62,6 +63,34 @@ class QuestionDetailView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsAuthor]
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
+
+    def get_object(self):
+        obj = get_object_or_404(self.queryset, pk=self.kwargs['pk'])
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class HintCreateView(CreateAPIView):
+    """Create new hints."""
+
+    permission_classes = [IsAuthenticated, IsAuthor]
+    serializer_class = HintSerializer
+
+    def post(self, request, *args, **kwargs):
+        question = get_object_or_404(
+            Theme,
+            pk=self.request.data.get('question_id'),
+        )
+        self.check_object_permissions(self.request, question)
+        return self.create(request, *args, **kwargs)
+
+
+class HintDetailView(RetrieveUpdateDestroyAPIView):
+    """Details of, update or delete hints."""
+
+    permission_classes = [IsAuthenticated, IsAuthor]
+    serializer_class = HintSerializer
+    queryset = Hint.objects.all()
 
     def get_object(self):
         obj = get_object_or_404(self.queryset, pk=self.kwargs['pk'])

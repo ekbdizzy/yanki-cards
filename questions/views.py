@@ -1,14 +1,14 @@
-from rest_framework import status
+from rest_framework import permissions
 from rest_framework.generics import (
     CreateAPIView,
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
+    get_object_or_404,
 )
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
 )
-from rest_framework.response import Response
 
 from .models import Theme
 from .serializers import (
@@ -16,6 +16,13 @@ from .serializers import (
     ThemeDetailSerializer,
     ThemeSerializer,
 )
+
+
+class IsAuthor(permissions.BasePermission):
+    """Permission check for authority of theme."""
+
+    def has_object_permission(self, request, view, obj):
+        return obj.author == request.user
 
 
 class ThemeListView(ListCreateAPIView):
@@ -34,34 +41,14 @@ class ThemeListView(ListCreateAPIView):
 class ThemeDetailView(RetrieveUpdateDestroyAPIView):
     """Details of, update or delete private themes."""
 
-    # TODO add permission_class IsAuthor
-
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthor]
     serializer_class = ThemeDetailSerializer
+    queryset = Theme.objects.all()
 
-    def get_queryset(self):
-        theme_id = self.kwargs.get('pk')
-        queryset = Theme.objects.filter(id=theme_id)
-        return queryset
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.author == request.user:
-            return super().update(self, request, args, kwargs)
-        return Response(
-            {"error": "Only author can retrieve theme."},
-            status=status.HTTP_403_FORBIDDEN,
-        )
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.author == request.user:
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(
-            {"error": "Only author can delete theme."},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+    def get_object(self):
+        obj = get_object_or_404(self.queryset, pk=self.kwargs['pk'])
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class QuestionCreateView(CreateAPIView):

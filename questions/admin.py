@@ -3,10 +3,17 @@ from django.contrib import admin
 from .models import Hint, Question, Theme
 
 
+class QuestionInLine(admin.TabularInline):
+    model = Question
+    extra = 1
+
+
 @admin.register(Theme)
 class ThemeAdmin(admin.ModelAdmin):
     class Meta:
         model = Theme
+
+    inlines = (QuestionInLine,)
 
 
 @admin.register(Hint)
@@ -28,4 +35,3 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = (HintInLine,)
     list_display = ('text',)
     list_filter = ('theme',)
-    raw_id_fields = ('author',)

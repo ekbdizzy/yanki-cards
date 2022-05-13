@@ -26,17 +26,12 @@ class Question(models.Model):
     """Base questions to users."""
 
     text = models.CharField('Question', max_length=120)
-    author = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Author',
-        related_name='questions',
-    )
-    theme = models.ManyToManyField(
-        to='Theme',
+    theme = models.ForeignKey(
+        Theme,
+        on_delete=models.CASCADE,
         related_name='questions',
         verbose_name='Themes',
+        null=True,
     )
 
     def __str__(self):

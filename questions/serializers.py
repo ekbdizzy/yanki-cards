@@ -38,6 +38,7 @@ class ThemeDetailSerializer(ThemeSerializer):
         fields = ('id', 'title', 'is_private', 'questions')
 
     author = None
+    questions = QuestionSerializer(many=True)
 
 
 class HintSerializer(serializers.ModelSerializer):

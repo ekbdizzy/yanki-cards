@@ -8,9 +8,9 @@ from .models import Hint, Question, Theme
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('id', 'text', 'theme')
+        fields = ('id', 'text', 'theme_id')
 
-    theme = serializers.CharField(write_only=True)
+    theme_id = serializers.IntegerField(write_only=True)
 
 
 class ThemeSerializer(serializers.ModelSerializer):
@@ -26,7 +26,8 @@ class ThemeSerializer(serializers.ModelSerializer):
         request_user = self.context['request'].user
         try:
             user = User.objects.get(email=request_user)
-            theme = Theme.objects.create(author=user, **validated_data)
+            validated_data['author'] = user
+            theme = Theme.objects.create(**validated_data)
             return theme
         except User.DoesNotExist:
             return None

@@ -9,7 +9,7 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 
-from .models import Theme
+from .models import Question, Theme
 from .permissions import IsAuthor, IsPublicTheme
 from .serializers import (
     QuestionSerializer,
@@ -47,11 +47,23 @@ class ThemeDetailView(RetrieveUpdateDestroyAPIView):
 class QuestionCreateView(CreateAPIView):
     """Create new question."""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthor]
     serializer_class = QuestionSerializer
+
+    def post(self, request, *args, **kwargs):
+        theme = get_object_or_404(Theme, pk=self.request.data.get('theme_id'))
+        self.check_object_permissions(self.request, theme)
+        return self.create(request, *args, **kwargs)
 
 
 class QuestionDetailView(RetrieveUpdateDestroyAPIView):
     """Details of, update or delete questions."""
 
-    pass
+    permission_classes = [IsAuthenticated, IsAuthor]
+    serializer_class = QuestionSerializer
+    queryset = Question.objects.all()
+
+    def get_object(self):
+        obj = get_object_or_404(self.queryset, pk=self.kwargs['pk'])
+        self.check_object_permissions(self.request, obj)
+        return obj

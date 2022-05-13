@@ -9,6 +9,9 @@ class Theme(models.Model):
     Users can create themes by himself.
     User's created models are private."""
 
+    # TODO Maybe use MPTT TreeForeignKey?
+    # https://django-mptt.readthedocs.io/en/latest/tutorial.html
+
     title = models.CharField('Title', max_length=50, unique=True)
     is_private = models.BooleanField(default=True)
     author = models.ForeignKey(

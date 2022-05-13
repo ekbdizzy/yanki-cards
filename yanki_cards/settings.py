@@ -40,6 +40,15 @@ REST_FRAMEWORK = {
     ),
 }
 
+# REDIS
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+
+# Yandex.translate credentials
+YA_OAUTH_TOKEN = env('YA_OAUTH_TOKEN')
+FOLDER_ID = env('FOLDER_ID')
+IAMTOKEN = env('IAMTOKEN')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

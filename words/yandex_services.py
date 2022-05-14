@@ -1,8 +1,24 @@
+from datetime import datetime, timezone
+
+from dateutil.parser import ParserError, parse
+
 from django.conf import settings
 
 import redis
 
 import requests
+
+
+def get_hours_before_expired(expire_date: str) -> float | int:
+    """Format of expire_date: '2022-05-14T20:32:09.801350141Z'.
+    Return hours left before expire_date.
+    Return 0 if parsing failed."""
+    try:
+        expire = parse(expire_date)
+        delta = expire - datetime.now(timezone.utc)
+        return delta.seconds // 3600
+    except (ParserError, TypeError):
+        return 0
 
 
 def _is_redis_available(redis_instance: redis.Redis) -> bool:
@@ -24,6 +40,7 @@ def _fetch_yandex_token(oauth_token: str) -> dict:
         json={"yandexPassportOauthToken": oauth_token},
     )
     response.raise_for_status()
+    # FIXME Add handler what to do if yandex is unavailable
     return response.json()
 
 
@@ -35,28 +52,32 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
     r = redis.Redis(  # noqa VNE001
         host=settings.REDIS_HOST,
         port=settings.REDIS_PORT,
+        decode_responses=True,
         db=0,
     )
 
     if _is_redis_available(r):
         token = r.get('iamToken')
-        #  TODO add check for token expiring.
-        if token:
-            return token.decode('utf-8')
-        i_am_token = _fetch_yandex_token(oauth_token)
-        token = i_am_token['iamToken']
-        r.set('iamToken', token)
+        expires_at = r.get('iamToken_expires_at')
+        if token is None or get_hours_before_expired(expires_at) < 6:
+            print('I am here')
+            token_response = _fetch_yandex_token(oauth_token)
+            token = token_response['iamToken']
+            expires_at = token_response['expiresAt']
+            r.set('iamToken', token)
+            r.set('iamToken_expires_at', expires_at)
     else:
-        i_am_token = _fetch_yandex_token(oauth_token)
-        token = i_am_token['iamToken']
+        token_response = _fetch_yandex_token(oauth_token)
+        token = token_response['iamToken']
     return token
 
 
-def translate_word(token: str, word: str, language_code: str = "ru") -> str:
+def translate_phrase(token: str, phrase: str, language_code: str = "ru") -> str:
+    # FIXME Validate phrase has no more 60 characters.
     url = "https://translate.api.cloud.yandex.net/translate/v2/translate"
     body = {
         "targetLanguageCode": language_code,
-        "texts": [word],
+        "texts": [phrase],
         "folderId": settings.FOLDER_ID,
     }
 

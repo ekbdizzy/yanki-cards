@@ -1,19 +1,19 @@
 from django.contrib import admin
 
-from .models import UserWord, Word
+from .models import Phrase, UserPhrase
 
 
-class UserWordInLine(admin.TabularInline):
-    model = UserWord
+class UserPhraseInLine(admin.TabularInline):
+    model = UserPhrase
     raw_id_fields = ('user',)
     extra = 1
 
 
-@admin.register(Word)
-class WordAdmin(admin.ModelAdmin):
+@admin.register(Phrase)
+class PhraseAdmin(admin.ModelAdmin):
     class Meta:
-        model = Word
+        model = Phrase
 
     raw_id_fields = ('users',)
     list_filter = ('language',)
-    inlines = (UserWordInLine,)
+    inlines = (UserPhraseInLine,)

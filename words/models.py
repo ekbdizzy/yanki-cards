@@ -3,15 +3,16 @@ from django.db import models
 from users.models import User
 
 
-class Word(models.Model):
+class Phrase(models.Model):
     """Model is for savings new words."""
 
     LANGUAGES = (
         ('en', 'english'),
         ('ru', 'russian'),
+        ('tr', 'turkish'),
     )
 
-    word = models.CharField('Word', max_length=60, db_index=True)
+    phrase = models.CharField('phrase', max_length=60, db_index=True)
     language = models.CharField(
         'Language',
         choices=LANGUAGES,
@@ -20,15 +21,15 @@ class Word(models.Model):
     )
     users = models.ManyToManyField(
         User,
-        through='UserWord',
-        related_name='words',
+        through='UserPhrase',
+        related_name='phrases',
     )
 
     def __str__(self):
-        return f"{self.word}: {self.language}"
+        return f"{self.phrase}: {self.language}"
 
 
-class UserWord(models.Model):
+class UserPhrase(models.Model):
     """Additional model to link words and users.
     Implemented as a separate model
     to save date of creation new words by user."""
@@ -39,8 +40,8 @@ class UserWord(models.Model):
         on_delete=models.CASCADE,
         verbose_name='User',
     )
-    word = models.ForeignKey(
-        Word,
+    phrase = models.ForeignKey(
+        Phrase,
         on_delete=models.CASCADE,
-        verbose_name='Word',
+        verbose_name='Phrase',
     )

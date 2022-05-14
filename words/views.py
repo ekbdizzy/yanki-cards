@@ -5,8 +5,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import WordSerializer
-from .yandex_services import get_yandex_token, translate_word
+from .serializers import PhraseSerializer
+from .yandex_services import get_yandex_token, translate_phrase
 
 
 def parse_language_code(word: str) -> str:
@@ -19,14 +19,14 @@ def parse_language_code(word: str) -> str:
 @permission_classes([AllowAny])
 def get_translation_view(request):
     """Translate word and return translation."""
-    serializer = WordSerializer(data=request.data)
+    serializer = PhraseSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    word = serializer.validated_data.get('word')
+    phrase = serializer.validated_data.get('phrase')
     token = get_yandex_token(settings.YA_OAUTH_TOKEN)
-    translation = translate_word(
+    translation = translate_phrase(
         token=token,
-        word=word,
-        language_code=parse_language_code(word),
+        phrase=phrase,
+        language_code=parse_language_code(phrase),
     )
     return Response(translation)
 

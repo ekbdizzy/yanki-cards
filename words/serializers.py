@@ -8,6 +8,8 @@ class PhraseSerializer(serializers.ModelSerializer):
         model = Phrase
         fields = ('phrase', 'language')
 
+    phrase = serializers.CharField(max_length=60)
+
 
 class TranslationsStackSerializer(serializers.ModelSerializer):
     class Meta:

@@ -16,4 +16,4 @@ class TranslationsStackSerializer(serializers.ModelSerializer):
         model = TranslationsStack
         fields = ('phrases', 'created_at')
 
-    # phrases = PhraseSerializer(many=True)
+    phrases = PhraseSerializer(many=True)

@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.conf import settings
 from django.db import transaction
 
@@ -36,29 +38,50 @@ def get_translation_view(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @transaction.atomic
-def create_new_translation_view(request):  # noqa CCR001
-    """Create new phrases and translations stack."""
+def create_new_translation_view(request):
+    """Create new phrases and translations_stack.
+    Remove collisions if translations_stacks more than one.
+    Return created or updated translation_stack in Response."""
     serializer = PhraseSerializer(data=request.data, many=True)
     serializer.is_valid()
 
     phrases = []
     for phrase_data in serializer.validated_data:
-        phrase, created = Phrase.objects.get_or_create(**phrase_data)
+        phrase, _ = Phrase.objects.get_or_create(**phrase_data)
         phrases.append(phrase)
 
-    stack = TranslationsStack.objects.filter(
-        phrases__in=phrases,
-        user=request.user,
-    ).first()
-    if stack:
-        for phrase in phrases:
-            if phrase not in stack.phrases.all():
-                stack.phrases.add(phrase)
-    else:
-        stack = TranslationsStack.objects.create(user=request.user)
-        stack.phrases.add(*phrases)
+    stacks = (
+        TranslationsStack.objects.filter(
+            user=request.user,
+            phrases__in=phrases,
+        )
+        .prefetch_related('phrases')
+        .distinct()
+    )
 
-    serializer = TranslationsStackSerializer(data=stack)
-    serializer.is_valid(raise_exception=True)
+    match stacks.count():
 
-    return Response(serializer, status=status.HTTP_201_CREATED)
+        case 0:  # stack does not exists:
+            stack = TranslationsStack.objects.create(user=request.user)
+            stack.phrases.set(phrases)
+
+        case 1:  # there is only one stack:
+            stack = stacks.first()
+            for phrase in phrases:
+                if phrase not in stack.phrases.all():
+                    stack.phrases.add(phrase)
+
+        case _:  # there are more than one stack.
+            phrases = set(
+                chain.from_iterable([s.phrases.all() for s in stacks]),
+            )
+            stack = stacks.first()
+            for phrase in phrases:
+                if phrase not in stack.phrases.all():
+                    stack.phrases.add(phrase)
+            stacks_ids = [stack.id for stack in stacks]
+            stacks_ids.remove(stack.id)
+            TranslationsStack.objects.filter(id__in=stacks_ids).delete()
+
+    stack_serializer = TranslationsStackSerializer(stack)
+    return Response(stack_serializer.data, status=status.HTTP_201_CREATED)

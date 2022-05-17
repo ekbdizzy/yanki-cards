@@ -59,8 +59,7 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
     if _is_redis_available(r):
         token = r.get('iamToken')
         expires_at = r.get('iamToken_expires_at')
-        if token is None or get_hours_before_expired(expires_at) < 6:
-            print('I am here')
+        if token is None or get_hours_before_expired(expires_at) > 6:
             token_response = _fetch_yandex_token(oauth_token)
             token = token_response['iamToken']
             expires_at = token_response['expiresAt']
@@ -68,12 +67,12 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
             r.set('iamToken_expires_at', expires_at)
     else:
         token_response = _fetch_yandex_token(oauth_token)
+        print('Fetch token')
         token = token_response['iamToken']
     return token
 
 
 def translate_phrase(token: str, phrase: str, language_code: str = "ru") -> str:
-    # FIXME Validate phrase has no more 60 characters.
     url = "https://translate.api.cloud.yandex.net/translate/v2/translate"
     body = {
         "targetLanguageCode": language_code,
@@ -89,4 +88,7 @@ def translate_phrase(token: str, phrase: str, language_code: str = "ru") -> str:
         url=url,
         json=body,
     )
-    return response.json()["translations"]
+    if response.ok:
+        return response.json()["translations"]
+
+    return response.json()

@@ -67,7 +67,6 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
             r.set('iamToken_expires_at', expires_at)
     else:
         token_response = _fetch_yandex_token(oauth_token)
-        print('Fetch token')
         token = token_response['iamToken']
     return token
 

@@ -32,6 +32,7 @@ class TranslationsStack(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='User',
+        related_name='translations',
     )
     phrases = models.ManyToManyField(
         to='Phrase',

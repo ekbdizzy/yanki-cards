@@ -5,7 +5,8 @@ from django.db import transaction
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.generics import DestroyAPIView, ListAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Phrase, TranslationsStack
@@ -85,3 +86,24 @@ def create_new_translation_view(request):
 
     stack_serializer = TranslationsStackSerializer(stack)
     return Response(stack_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class TranslationsStackView(ListAPIView):
+    """List of user's translations of words."""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = TranslationsStackSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.translations.all()
+
+
+class TranslationsStackDeleteView(DestroyAPIView):
+    """Delete translations stack."""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = TranslationsStackSerializer
+
+    def get_queryset(self):
+        return TranslationsStack.objects.filter(user=self.request.user)

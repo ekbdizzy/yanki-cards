@@ -25,4 +25,5 @@ class TranslationsStackAdmin(admin.ModelAdmin):
 
     raw_id_fields = ('phrases',)
     search_fields = ('phrases',)
+    list_filter = ('phrases__language',)
     inlines = [PhraseTranslationInlines]

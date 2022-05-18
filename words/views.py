@@ -1,7 +1,12 @@
+import codecs
+import csv
 from itertools import chain
 
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Q
+from django.http import HttpResponse
+from django.utils import dateformat, timezone
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -107,3 +112,49 @@ class TranslationsStackDeleteView(DestroyAPIView):
 
     def get_queryset(self):
         return TranslationsStack.objects.filter(user=self.request.user)
+
+
+def _get_csv_file_name(request):
+    formatted_date = dateformat.format(timezone.now(), "d_m_Y")
+    user_name, _ = request.user.email.split("@")
+    return f"yanki_{user_name}_{formatted_date}.csv"
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_anki_cards_view(request):
+    """Download csv file with anki cards on selected languages.
+    Should have param "lang" with pair language codes(?lang=ru,en)."""
+
+    languages = request.GET.get('lang')
+    if languages is None:
+        return Response(
+            {"error": "Should have param 'lang' with languages: (?lang=ru,en)"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    lang1, lang2 = languages.split(',')
+    translations_stacks = TranslationsStack.objects.filter(
+        user=request.user,
+    )
+    pairs = []
+    for stack in translations_stacks:
+        phrases = stack.phrases.filter(Q(language=lang1) | Q(language=lang2))
+        phrases_pair = [phrase.phrase for phrase in phrases]
+        if len(phrases_pair) == 2:
+            pairs.append(phrases_pair)
+
+    csv_file_name = _get_csv_file_name(request)
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={
+            'Content-Disposition': f'attachment; filename="{csv_file_name}"',
+        },
+    )
+    response.write(codecs.BOM_UTF8)
+    csv_writer = csv.writer(response, delimiter='\t')
+    for pair in pairs:
+        csv_writer.writerow(pair)
+        csv_writer.writerow(reversed(pair))
+
+    return response

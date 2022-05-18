@@ -41,6 +41,13 @@ class TranslationsStack(models.Model):
         verbose_name='Phrases',
     )
 
+    def __str__(self):
+        phrases = [phrase for phrase in self.phrases.all()]
+        ph = " | ".join(
+            (f"{phrase.phrase}: {phrase.language}" for phrase in phrases),
+        )
+        return f"{self.user}, <{ph}>"
+
 
 class PhraseTranslation(models.Model):
     phrase = models.ForeignKey(Phrase, on_delete=models.CASCADE)

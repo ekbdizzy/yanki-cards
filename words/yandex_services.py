@@ -49,11 +49,8 @@ def _fetch_yandex_token(oauth_token: str) -> dict:
             return {'error': "Unable to connect to Yandex.Translate"}
 
 
-def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
-    """Try get token value from redis.
-    If it's not available, fetch token from yandex.
-    Strange name i_am_token got from yandex."""
-
+def get_token_or_none_from_redis() -> tuple[str | None, str | None]:
+    """Try to get token and expiresAt values in Redis."""
     r = redis.Redis(  # noqa VNE001
         host=settings.REDIS_HOST,
         port=settings.REDIS_PORT,
@@ -64,13 +61,40 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
     if _is_redis_available(r):
         token = r.get('iamToken')
         expires_at = r.get('iamToken_expires_at')
-        if token is None or get_hours_before_expired(expires_at) > 6:
-            token_response = _fetch_yandex_token(oauth_token)
-            token = token_response.get('iamToken', "")
-            if token:
-                expires_at = token_response['expiresAt']
-                r.set('iamToken', token)
-                r.set('iamToken_expires_at', expires_at)
+        return token, expires_at
+
+    else:
+        return None, None
+
+
+def set_token_to_redis(token_response: dict):
+    """Save token and expiresAt values in Redis."""
+    token = token_response.get('iamToken', "")
+    if not token:
+        return
+
+    r = redis.Redis(  # noqa VNE001
+        host=settings.REDIS_HOST,
+        port=settings.REDIS_PORT,
+        decode_responses=True,
+        db=0,
+    )
+
+    if _is_redis_available(r):
+        expires_at = token_response['expiresAt']
+        r.set('iamToken', token)
+        r.set('iamToken_expires_at', expires_at)
+
+
+def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
+    """Try get token value from redis.
+    If it's not available, fetch token from yandex.
+    Strange name i_am_token got from yandex."""
+
+    token, expires_at = get_token_or_none_from_redis()
+    if token is None or get_hours_before_expired(expires_at) > 6:
+        token_response = _fetch_yandex_token(oauth_token)
+        set_token_to_redis(token_response)
     else:
         token_response = _fetch_yandex_token(oauth_token)
         token = token_response.get('iamToken', "")
@@ -84,7 +108,6 @@ def translate_phrase(token: str, phrase: str, language_code: str = "ru") -> str:
         "texts": [phrase],
         "folderId": settings.FOLDER_ID,
     }
-
     response = requests.post(
         headers={
             "Authorization": f"Bearer {token}",

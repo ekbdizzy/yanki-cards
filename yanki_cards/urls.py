@@ -21,6 +21,7 @@ urlpatterns = [
     path('auth/', include('django.contrib.auth.urls')),
     path('api/', include('questions.urls')),
     path('api/', include('words.urls')),
+    path('api/', include('feedback.urls')),
 ]
 
 if settings.DEBUG:

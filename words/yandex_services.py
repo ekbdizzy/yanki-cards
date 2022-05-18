@@ -39,9 +39,14 @@ def _fetch_yandex_token(oauth_token: str) -> dict:
         url=iam_token_url,
         json={"yandexPassportOauthToken": oauth_token},
     )
-    response.raise_for_status()
-    # FIXME Add handler what to do if yandex is unavailable
-    return response.json()
+    if response.ok:
+        return response.json()
+
+    match response.status_code:
+        case 401:
+            return {'error': "401 Client Error:  Unauthorized"}
+        case _:
+            return {'error': "Unable to connect to Yandex.Translate"}
 
 
 def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
@@ -61,13 +66,14 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
         expires_at = r.get('iamToken_expires_at')
         if token is None or get_hours_before_expired(expires_at) > 6:
             token_response = _fetch_yandex_token(oauth_token)
-            token = token_response['iamToken']
-            expires_at = token_response['expiresAt']
-            r.set('iamToken', token)
-            r.set('iamToken_expires_at', expires_at)
+            token = token_response.get('iamToken', "")
+            if token:
+                expires_at = token_response['expiresAt']
+                r.set('iamToken', token)
+                r.set('iamToken_expires_at', expires_at)
     else:
         token_response = _fetch_yandex_token(oauth_token)
-        token = token_response['iamToken']
+        token = token_response.get('iamToken', "")
     return token
 
 

@@ -42,11 +42,12 @@ class TranslationsStack(models.Model):
     )
 
     def __str__(self):
-        phrases = [phrase for phrase in self.phrases.all()]
-        ph = " | ".join(
-            (f"{phrase.phrase}: {phrase.language}" for phrase in phrases),
+        all_phrases = [phrase for phrase in self.phrases.all()]
+        # FIXME rename ph
+        phrases = " | ".join(
+            (f"{phrase.phrase}: {phrase.language}" for phrase in all_phrases),
         )
-        return f"{self.user}, <{ph}>"
+        return f"{self.user}, <{phrases}>"
 
 
 class PhraseTranslation(models.Model):

@@ -7,7 +7,8 @@ def set_user_in_themes(apps, schema_editor):
     User = apps.get_model('users', 'User')
     Theme = apps.get_model('questions', 'Theme')
     themes = Theme.objects.filter(author=None)
-    admin = User.objects.get(email='admin@mail.com')
+    admin, _ = User.objects.get_or_create(email='admin@mail.com')
+
     for theme in themes:
         theme.author = admin
         theme.save()

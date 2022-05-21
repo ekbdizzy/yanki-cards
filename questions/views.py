@@ -19,7 +19,7 @@ from .serializers import (
 )
 
 
-class ThemeListView(ListCreateAPIView):
+class ThemeListCreateView(ListCreateAPIView):
     """Get list of public and private themes."""
 
     permission_classes = [IsAuthenticatedOrReadOnly]

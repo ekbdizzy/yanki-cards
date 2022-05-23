@@ -85,3 +85,19 @@ class ThemeTestCase(APITestCase):
         self.assertTrue(
             Theme.objects.filter(title='Created Theme', is_private=True),
         )
+
+    def test_update(self):
+        update_data = {"title": 'Updated Theme'}
+        self.client.force_login(self.user1)
+        response = self.client.patch(self.url_detail, data=update_data)
+        theme = Theme.objects.get(id=self.theme_private_1.id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(theme.title, update_data['title'])
+
+    def test_delete(self):
+        self.assertEqual(Theme.objects.all().count(), 4)
+
+        self.client.force_login(self.user1)
+        response = self.client.delete(self.url_detail)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Theme.objects.all().count(), 3)

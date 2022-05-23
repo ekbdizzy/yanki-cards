@@ -19,7 +19,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'text', 'theme_id', 'hints')
 
     theme_id = serializers.IntegerField(write_only=True)
-    hints = HintSerializer(many=True)
+    hints = HintSerializer(many=True, required=False)
 
 
 class ThemeSerializer(serializers.ModelSerializer):

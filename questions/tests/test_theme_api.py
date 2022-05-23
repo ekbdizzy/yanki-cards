@@ -13,7 +13,6 @@ from ..serializers import ThemeSerializer
 
 class ThemeTestCase(APITestCase):
     def setUp(self):
-
         self.user1 = User.objects.create(email='user1@mail.com')
         self.user2 = User.objects.create(email='user2@mail.com')
 
@@ -37,7 +36,7 @@ class ThemeTestCase(APITestCase):
             author=self.user2,
         )
 
-        self.url_list_create = reverse('theme-list')
+        self.url_list_create = reverse('theme-list-create')
         self.url_detail = reverse(
             'theme-detail',
             kwargs={'pk': self.theme_private_1.id},
@@ -67,8 +66,8 @@ class ThemeTestCase(APITestCase):
 
     def test_create(self):
         self.assertEqual(Theme.objects.all().count(), 4)
-        book_data = {"title": 'Created Theme'}
-        data = json.dumps(book_data)
+        theme_data = {"title": 'Created Theme'}
+        data = json.dumps(theme_data)
 
         # Unauthenticated
         response = self.client.post(

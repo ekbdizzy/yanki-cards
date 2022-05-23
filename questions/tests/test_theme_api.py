@@ -43,8 +43,9 @@ class ThemeTestCase(APITestCase):
             kwargs={'pk': self.theme_private_1.id},
         )
 
-    def test_anonymous_get(self):
+    def test_get(self):
 
+        # Unauthenticated
         public_themes = [self.theme_public_1, self.theme_public_2]
         serializer_data = ThemeSerializer(public_themes, many=True).data
 
@@ -52,34 +53,39 @@ class ThemeTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(serializer_data, response.data)
 
-    def test_authenticated_get(self):
-
+        # Authenticated
+        self.client.force_login(self.user1)
         themes = [
             self.theme_public_1,
             self.theme_public_2,
             self.theme_private_1,
         ]
-
         serializer_data = ThemeSerializer(themes, many=True).data
-
-        self.client.force_login(self.user1)
         response = self.client.get(self.url_list_create)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(serializer_data, response.data)
 
     def test_create(self):
-
         self.assertEqual(Theme.objects.all().count(), 4)
-
-        self.client.force_login(self.user1)
         book_data = {"title": 'Created Theme'}
         data = json.dumps(book_data)
+
+        # Unauthenticated
         response = self.client.post(
             self.url_list_create,
             data=data,
             content_type='application/json',
         )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Theme.objects.all().count(), 4)
 
+        # Authenticated
+        self.client.force_login(self.user1)
+        response = self.client.post(
+            self.url_list_create,
+            data=data,
+            content_type='application/json',
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Theme.objects.all().count(), 5)
         self.assertTrue(
@@ -88,6 +94,14 @@ class ThemeTestCase(APITestCase):
 
     def test_update(self):
         update_data = {"title": 'Updated Theme'}
+
+        # Unauthenticated
+        response = self.client.patch(self.url_detail, data=update_data)
+        theme = Theme.objects.get(id=self.theme_private_1.id)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(theme.title, self.theme_private_1.title)
+
+        # Authenticated
         self.client.force_login(self.user1)
         response = self.client.patch(self.url_detail, data=update_data)
         theme = Theme.objects.get(id=self.theme_private_1.id)
@@ -97,6 +111,12 @@ class ThemeTestCase(APITestCase):
     def test_delete(self):
         self.assertEqual(Theme.objects.all().count(), 4)
 
+        # Unauthenticated
+        response = self.client.delete(self.url_detail)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Theme.objects.all().count(), 4)
+
+        # Authenticated
         self.client.force_login(self.user1)
         response = self.client.delete(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

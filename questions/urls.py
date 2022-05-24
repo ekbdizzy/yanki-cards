@@ -22,6 +22,6 @@ urlpatterns = [
         QuestionDetailView.as_view(),
         name='question-detail',
     ),
-    path('hints/', HintCreateView.as_view(), name='hint-create'),
+    path('hints/create/', HintCreateView.as_view(), name='hint-create'),
     path('hints/<int:pk>/', HintDetailView.as_view(), name='hint-detail'),
 ]

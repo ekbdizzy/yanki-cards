@@ -8,6 +8,7 @@ from rest_framework.test import APITestCase
 from users.models import User
 
 from ..models import Question, Theme
+from ..serializers import QuestionSerializer
 
 
 class QuestionTestCase(APITestCase):
@@ -52,16 +53,15 @@ class QuestionTestCase(APITestCase):
     def test_get(self):
 
         # Unauthorized
-        response = self.client.get(self.url_create)
+        response = self.client.get(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # Authorized
         self.client.force_login(self.user1)
-        response = self.client.get(self.url_create)
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
+        response = self.client.get(self.url_detail)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        serialized_data = QuestionSerializer(self.question_1_theme_1).data
+        self.assertEqual(response.data, serialized_data)
 
     def test_create(self):
         self.assertEqual(Question.objects.all().count(), 4)

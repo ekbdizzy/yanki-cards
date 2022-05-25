@@ -136,4 +136,4 @@ dmypy.json
 
 
 data
-django-static
+static

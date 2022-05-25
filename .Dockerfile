@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.10
 ENV PYTHONUNBUFFERED 1
 WORKDIR .
 COPY requirements.txt requirements.txt

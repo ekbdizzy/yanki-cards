@@ -1,3 +1,5 @@
+import csv
+import io
 import json
 from unittest import mock
 
@@ -143,11 +145,22 @@ class WordAPITestCase(APITestCase):
             'delete-translation',
             kwargs={'pk': self.translations_stack_2.id},
         )
-        print(url)
         self.client.force_login(self.user)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TranslationsStack.objects.all().count(), 2)
 
     def test_get_anki_cards(self):
-        pass
+        url = reverse('get-anki-cards')
+        self.client.force_login(self.user)
+        response = self.client.get(
+            url,
+            data={'lang': 'tr,en'},
+            content_type='text/csv',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = response.content.decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+        body = list(csv_reader)
+        self.assertEqual(body[1], ['merhaba\thello'])

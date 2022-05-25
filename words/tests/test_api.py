@@ -153,6 +153,18 @@ class WordAPITestCase(APITestCase):
     def test_get_anki_cards(self):
         url = reverse('get-anki-cards')
         self.client.force_login(self.user)
+
+        # request without param lang
+        response = self.client.get(
+            url,
+            content_type='text/csv',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response_error = {
+            "error": "Should have param 'lang' with languages: (?lang=ru,en)",
+        }
+        self.assertEqual(response.data, response_error)
+
         response = self.client.get(
             url,
             data={'lang': 'tr,en'},

@@ -33,13 +33,10 @@ class ThemeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request_user = self.context['request'].user
-        try:
-            user = User.objects.get(email=request_user)
-            validated_data['author'] = user
-            theme = Theme.objects.create(**validated_data)
-            return theme
-        except User.DoesNotExist:
-            return None
+        user = User.objects.get(email=request_user)
+        validated_data['author'] = user
+        theme = Theme.objects.create(**validated_data)
+        return theme
 
 
 class ThemeDetailSerializer(ThemeSerializer):

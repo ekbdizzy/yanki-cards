@@ -36,13 +36,14 @@ def get_translation_view(request):
     translation = translate_phrase(
         token=token,
         phrase=phrase,
+        #  FIXME setup language
         language_code=parse_language_code(phrase),
     )
     return Response(translation)
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 @transaction.atomic
 def create_new_translation_view(request):
     """Create new phrases and translations_stack.
@@ -77,12 +78,12 @@ def create_new_translation_view(request):
                 if phrase not in stack.phrases.all():
                     stack.phrases.add(phrase)
 
-        case _:  # there are more than one stack.
-            phrases = set(
+        case _:  # there are more than one stack:
+            phrases_set = set(
                 chain.from_iterable([s.phrases.all() for s in stacks]),
-            )
+            ).union(phrases)
             stack = stacks.first()
-            for phrase in phrases:
+            for phrase in phrases_set:
                 if phrase not in stack.phrases.all():
                     stack.phrases.add(phrase)
             stacks_ids = [stack.id for stack in stacks]

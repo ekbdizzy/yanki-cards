@@ -10,9 +10,21 @@ from .views import (
 
 
 urlpatterns = [
-    path('words/translate/', get_translation_view),
-    path('words/', create_new_translation_view),
-    path('words/translations/', TranslationsStackView.as_view()),
-    path('words/translations/<int:pk>', TranslationsStackDeleteView.as_view()),
-    path('words/cards/', get_anki_cards_view),
+    path('words/translate/', get_translation_view, name='word-translate'),
+    path(
+        'words/create/',
+        create_new_translation_view,
+        name='create-translation',
+    ),
+    path(
+        'words/translations/',
+        TranslationsStackView.as_view(),
+        name='translations-list',
+    ),
+    path(
+        'words/translations/<int:pk>',
+        TranslationsStackDeleteView.as_view(),
+        name='delete-translation',
+    ),
+    path('words/cards/', get_anki_cards_view, name='get-anki-cards'),
 ]

@@ -43,7 +43,6 @@ class TranslationsStack(models.Model):
 
     def __str__(self):
         all_phrases = [phrase for phrase in self.phrases.all()]
-        # FIXME rename ph
         phrases = " | ".join(
             (f"{phrase.phrase}: {phrase.language}" for phrase in all_phrases),
         )

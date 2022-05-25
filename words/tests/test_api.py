@@ -9,6 +9,7 @@ from rest_framework.test import APIRequestFactory, APITestCase
 from users.models import User
 
 from ..models import Phrase, TranslationsStack
+from ..serializers import TranslationsStackSerializer
 from ..views import get_translation_view
 
 
@@ -125,10 +126,28 @@ class WordAPITestCase(APITestCase):
         self.assertEqual(translations_stack.phrases.count(), 3)
 
     def test_get_translations_stacks_list(self):
-        pass
+        url = reverse('translations-list')
+        self.client.force_login(self.user)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        translations_stacks = TranslationsStack.objects.filter(user=self.user)
+        serialized_data = TranslationsStackSerializer(
+            translations_stacks,
+            many=True,
+        ).data
+        self.assertEqual(serialized_data, response.data)
 
     def test_delete_translation_stack(self):
-        pass
+        self.assertEqual(TranslationsStack.objects.all().count(), 3)
+        url = reverse(
+            'delete-translation',
+            kwargs={'pk': self.translations_stack_2.id},
+        )
+        print(url)
+        self.client.force_login(self.user)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(TranslationsStack.objects.all().count(), 2)
 
     def test_get_anki_cards(self):
         pass

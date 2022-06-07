@@ -4,16 +4,16 @@ from .models import Phrase, TranslationsStack
 
 
 class PhraseSerializer(serializers.ModelSerializer):
+    phrase = serializers.CharField(max_length=60)
+
     class Meta:
         model = Phrase
         fields = ('phrase', 'language')
 
-    phrase = serializers.CharField(max_length=60)
-
 
 class TranslationsStackSerializer(serializers.ModelSerializer):
+    phrases = PhraseSerializer(many=True)
+
     class Meta:
         model = TranslationsStack
         fields = ('id', 'phrases', 'created_at')
-
-    phrases = PhraseSerializer(many=True)

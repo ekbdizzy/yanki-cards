@@ -8,9 +8,6 @@ from .managers import YankiUserManager
 class User(AbstractUser):
     """Base user model with changed USERNAME_FIELD to email."""
 
-    class Meta(AbstractUser.Meta):
-        swappable = "AUTH_USER_MODEL"
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -18,3 +15,6 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True, db_index=True)
 
     objects = YankiUserManager()
+
+    class Meta(AbstractUser.Meta):
+        swappable = "AUTH_USER_MODEL"

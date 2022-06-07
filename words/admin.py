@@ -11,19 +11,21 @@ class PhraseTranslationInlines(admin.TabularInline):
 
 @admin.register(Phrase)
 class PhraseAdmin(admin.ModelAdmin):
-    class Meta:
-        model = Phrase
 
     list_filter = ('language',)
     search_fields = ('phrase',)
 
+    class Meta:
+        model = Phrase
+
 
 @admin.register(TranslationsStack)
 class TranslationsStackAdmin(admin.ModelAdmin):
-    class Meta:
-        model = TranslationsStack
 
     raw_id_fields = ('phrases',)
     search_fields = ('phrases',)
     list_filter = ('phrases__language',)
     inlines = [PhraseTranslationInlines]
+
+    class Meta:
+        model = TranslationsStack

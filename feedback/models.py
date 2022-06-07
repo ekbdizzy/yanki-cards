@@ -6,9 +6,6 @@ from users.models import User
 class Feedback(models.Model):
     """Feedback from users. Any problems, suggestions and other questions."""
 
-    class Meta:
-        verbose_name_plural = 'Feedback'
-
     FEEDBACK_STATUSES = (
         ('new', 'New'),
         ('important', 'Important'),
@@ -51,6 +48,9 @@ class Feedback(models.Model):
         related_name='user',
         verbose_name='User',
     )
+
+    class Meta:
+        verbose_name_plural = 'Feedback'
 
     def __str__(self):
         return f"{self.status} {self.theme} {self.title}"

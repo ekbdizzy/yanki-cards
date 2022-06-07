@@ -10,10 +10,11 @@ class QuestionInLine(admin.TabularInline):
 
 @admin.register(Theme)
 class ThemeAdmin(admin.ModelAdmin):
-    class Meta:
-        model = Theme
 
     inlines = (QuestionInLine,)
+
+    class Meta:
+        model = Theme
 
 
 @admin.register(Hint)
@@ -29,9 +30,10 @@ class HintInLine(admin.TabularInline):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    class Meta:
-        model = Question
 
     inlines = (HintInLine,)
     list_display = ('text',)
     list_filter = ('theme',)
+
+    class Meta:
+        model = Question

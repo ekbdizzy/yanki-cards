@@ -1,7 +1,23 @@
 .menu {
-	color: red;
+  margin: auto;
+  padding: 2em;
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
-.blue {
-	color: blue;
+.menu_item {
+  list-style-type: none;
+  font-size: 1.5em;
+}
+
+.menu_item a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu_item a:hover {
+  text-decoration: none;
+  color: #393939;
 }

@@ -1,0 +1,25 @@
+.p {
+
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.purple {
+  color: var(--purple);
+}
+
+.cyan {
+  color: var(--cyan);
+}
+
+.normal {
+  font-size: 1em;
+  font-weight: 400;
+}
+
+.big {
+  font-size: 1.25em;
+  font-weight: 500;
+}

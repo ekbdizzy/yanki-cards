@@ -1,0 +1,16 @@
+.input {
+  padding: 0.5em;
+  margin: 1em 0;
+  color: var(--purple);
+  border: none;
+  border-bottom: solid 1px var(--orange);
+  text-align: center;
+  max-width: 350px;
+  width: 100%;
+  font-weight: 300;
+  font-size: 1em;
+}
+
+.input:focus {
+  outline: none;
+}

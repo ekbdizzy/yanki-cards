@@ -1,0 +1,7 @@
+.badge {
+  padding: 4px 1em;
+  background: var(--purple);
+  color: var(--white);
+  border-radius: 0.5em;
+  font-weight: 700;
+}

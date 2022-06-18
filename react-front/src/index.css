@@ -9,10 +9,10 @@ body {
 
 :root {
   --primary: #432E92;
-  --cyan: #A337BE;
+  --purple: #A337BE;
   --yellow: #F6D230;
   --orange: #EC6D1B;
-  --light-blue: #57E2DC;
+  --cyan: #57E2DC;
   --white: #ffffff;
   --font-family: 'Roboto', sans-serif;
 }

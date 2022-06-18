@@ -1,8 +1,8 @@
-import {HeaderProps} from "./Header.props";
-import styles from './Header.module.css';
+import {HProps} from "./H.props";
+import styles from './H.module.css';
 import cn from 'classnames';
 
-export const Header = ({tag = 'h1', children, ...props}: HeaderProps): JSX.Element => {
+export const H = ({tag = 'h1', children, ...props}: HProps): JSX.Element => {
     switch (tag) {
         case 'h1':
             return <h1 className={cn(styles.header, styles.h1)} {...props}>{children}</h1>;

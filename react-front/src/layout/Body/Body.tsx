@@ -1,14 +1,14 @@
 import {BodyProps} from "./Body.props";
 import styles from './Body.module.css';
 import cn from "classnames";
-import {Badge, Header, Helper, Input, Listener, P} from "../../components";
+import {Badge, H, Helper, Input, Listener, P} from "../../components";
 
 
 export const Body = ({children, ...props}: BodyProps): JSX.Element => {
-    return <div className={cn(styles.body, {})} {...props}>{children}
+    return <div>{children}
         <Listener person='duck'/>
-        <Header tag={'h1'}>What is the capital of great britain?</Header>
-        <Header tag={'h2'}>Tell me about yourself and what do you think about global warmness?</Header>
+        <H tag={'h1'}>What is the capital of great britain?</H>
+        <H tag={'h2'}>Tell me about yourself and what do you think about global warmness?</H>
         <div className={styles.badges}>
             <Badge>Hello!</Badge>
             <Helper size='small' icon='add'>New question</Helper>

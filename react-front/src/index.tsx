@@ -3,8 +3,11 @@ import ReactDOM from 'react-dom/client';
 // import 'normalize.css';
 import './index.css';
 import App from './App';
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+
 import reportWebVitals from './reportWebVitals';
+import InterviewPage from "./pages/InterviewPage/InterviewPage";
+import MainPage from "./pages/MainPage/MainPage";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -12,7 +15,13 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-            <App/>
+            <Routes>
+                <Route path='/interview'
+                       element={<InterviewPage/>}/>
+                <Route path=''
+                       element={<MainPage/>}/>
+            </Routes>
+
         </BrowserRouter>
     </React.StrictMode>
 );

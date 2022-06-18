@@ -4,3 +4,12 @@
   justify-content: start;
   min-height: calc(100vh - 100px);
 }
+
+
+.wrapper {
+  max-width: 1280px;
+  margin: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

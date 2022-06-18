@@ -3,7 +3,7 @@ import styles from './Layout.module.css';
 import cn from 'classnames';
 import {Menu} from "../../components";
 import {Header, Body, Feedback, Footer} from '../../layout';
-import {FunctionComponent} from "react";
+import React, {FunctionComponent} from "react";
 
 export const Layout = ({children}: LayoutProps): JSX.Element => {
     return <>
@@ -11,10 +11,12 @@ export const Layout = ({children}: LayoutProps): JSX.Element => {
             <Header>
                 <Menu/>
             </Header>
-            <Body>
+            <div className={styles.wrapper}>
                 {children}
-                <Feedback/>
-            </Body>
+
+            </div>
+                            <Feedback/>
+
         </div>
         <Footer/>
     </>;

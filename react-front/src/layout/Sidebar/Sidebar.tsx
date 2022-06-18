@@ -6,6 +6,6 @@ export const Sidebar = ({children, ...props}: SidebarProps): JSX.Element => {
     return <aside className={cn(styles.sidebar, {})}
                   {...props}>
         {children}
-        sidebar
+        <h1>Themes</h1>
     </aside>;
 };

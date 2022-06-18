@@ -1,23 +1,26 @@
 .menu {
   margin: auto;
   padding: 2em;
-  width: 60%;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .menu_item {
   list-style-type: none;
-  font-size: 1.5em;
+  padding: 0 2em;
 }
 
 .menu_item a {
+  font-size: 1.5em;
+
   text-decoration: none;
-  color: black;
+  --font-family: var(--font-family);
+  color: var(--primary);
+  font-weight: 500;
 }
 
 .menu_item a:hover {
   text-decoration: none;
-  color: #393939;
+  color: var(--cyan);
 }

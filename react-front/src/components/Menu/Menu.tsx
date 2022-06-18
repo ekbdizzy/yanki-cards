@@ -14,7 +14,7 @@ export const Menu = ({...props}: MenuProps): JSX.Element => {
     ];
 
     const buildMenu = (menuItems: MenuItem[]): JSX.Element => {
-        return <ul className={cn(styles.menu)}>
+        return <ul className={cn(styles.menu)} {...props}>
             {menuItems.map(item => {
                 return <li className={cn(styles.menu_item)} key={item.route}>
                     <Link to={item.route}>{item.name}</Link>
@@ -22,5 +22,5 @@ export const Menu = ({...props}: MenuProps): JSX.Element => {
             })}
         </ul>;
     };
-    return <>{buildMenu(menuItems)}</>;
+    return <>{ buildMenu(menuItems) }</>;
 };

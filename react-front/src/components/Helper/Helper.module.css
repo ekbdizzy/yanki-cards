@@ -1,0 +1,38 @@
+.helper {
+  color: var(--orange);
+  margin: 1em;
+}
+
+.helper:hover {
+  cursor: pointer;
+}
+
+.helper:hover .icon {
+  transform: rotate(180deg);
+}
+
+.small {
+  font-size: 0.875em;
+  font-weight: 400;
+  padding-right: 0.5em;
+}
+
+.medium {
+  font-size: 1em;
+  font-weight: 700;
+  padding-right: 0.5em;
+}
+
+.icon {
+  transition: ease-out 0.3s;
+}
+
+.small_icon {
+  width: 2em;
+  vertical-align: middle;
+}
+
+.medium_icon {
+  width: 2.5em;
+  vertical-align: middle;
+}

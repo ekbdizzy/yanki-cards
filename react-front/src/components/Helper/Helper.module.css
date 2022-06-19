@@ -1,6 +1,6 @@
 .helper {
   color: var(--orange);
-  margin: 1em;
+  margin-right: 1em;
 }
 
 .helper:hover {

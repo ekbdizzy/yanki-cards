@@ -3,5 +3,5 @@ import styles from './Badge.module.css';
 
 export const Badge = ({children, ...props}: BadgeProps): JSX.Element => {
     return <span className={styles.badge}
-                 {...props}>{children}dsw</span>;
+                 {...props}>{children}</span>;
 };

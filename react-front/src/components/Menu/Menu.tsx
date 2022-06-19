@@ -8,7 +8,7 @@ export const Menu = ({...props}: MenuProps): JSX.Element => {
     const menuItems: MenuItem[] = [
         {name: "Main", route: '/'},
         {name: "About", route: '/about'},
-        {name: "Interview", route: '/Interview'},
+        {name: "Interview", route: '/interview'},
         {name: "Profile", route: '/profile'},
         {name: "My words", route: '/words'}
     ];

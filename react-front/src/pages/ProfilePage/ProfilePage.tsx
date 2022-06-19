@@ -2,11 +2,11 @@ import {withLayout} from "../../layout";
 import {H} from '../../components';
 import React from "react";
 
-function MainPage(): JSX.Element {
+function ProfilePage(): JSX.Element {
     return <>
-        <H tag='h1'>Main Page</H>
+        <H tag='h1'>Profile</H>
     </>;
 }
 
-export default withLayout(MainPage);
+export default withLayout(ProfilePage);
 

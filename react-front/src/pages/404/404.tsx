@@ -2,11 +2,11 @@ import {withLayout} from "../../layout";
 import {H} from '../../components';
 import React from "react";
 
-function MainPage(): JSX.Element {
+function Page404(): JSX.Element {
     return <>
-        <H tag='h1'>Main Page</H>
+        <H tag='h1'>Page does not exists</H>
     </>;
 }
 
-export default withLayout(MainPage);
+export default withLayout(Page404);
 

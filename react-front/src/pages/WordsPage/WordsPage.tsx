@@ -2,11 +2,11 @@ import {withLayout} from "../../layout";
 import {H} from '../../components';
 import React from "react";
 
-function MainPage(): JSX.Element {
+function WordsPage(): JSX.Element {
     return <>
-        <H tag='h1'>Main Page</H>
+        <H tag='h1'>Words</H>
     </>;
 }
 
-export default withLayout(MainPage);
+export default withLayout(WordsPage);
 

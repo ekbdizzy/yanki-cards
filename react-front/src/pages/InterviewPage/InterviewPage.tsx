@@ -1,9 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styles from './InterviewPage.module.css';
 import {Body, Feedback, withLayout} from "../../layout";
 import {Badge, H, Helper, Input, Listener, P} from "../../components";
 
+
 function InterviewPage(): JSX.Element {
+
+    const [translation, setTranslation] = useState<string>('');
+    const [word, setWord] = useState<string>('');
+
+    const changeWord = (e: any) => {
+        setWord(e.target.value);
+    };
+
+    const fetchTranslate = async (phrase: string) => {
+        const url = 'http://localhost:8000/api/words/translate/';
+        const response = await fetch(url,
+            {
+                method: 'post',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify({
+                    phrase: phrase
+                })
+            });
+        const text = await response.json();
+        setTranslation(text[0].text);
+    };
+
+
+    const submitWordToTranslate = (e: any) => {
+        e.preventDefault();
+        fetchTranslate(word);
+    };
+
+    useEffect(() => {
+        const a = 2;
+    }, [translation]);
+
+
     return <>
         <div className={styles.main}>
             <section>
@@ -26,8 +60,11 @@ function InterviewPage(): JSX.Element {
             </section>
             <section className={styles.listener_block}>
                 <Listener person='duck'/>
-                <Input value={'Need new word?'}/>
-                <P color='purple' size='big'>Apple</P>
+                <form method='POST' onSubmit={submitWordToTranslate}>
+                    <Input value={'Need new word?'}
+                           onChange={changeWord}/>
+                </form>
+                <P color='purple' size='big'>{translation}</P>
                 <Helper size='medium' icon='save'>Add new card</Helper>
             </section>
         </div>

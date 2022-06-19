@@ -1,6 +1,6 @@
 import {withLayout} from "../../layout";
 import {H} from '../../components';
-import React from "react";
+import React, {useState} from "react";
 
 function WordsPage(): JSX.Element {
     return <>

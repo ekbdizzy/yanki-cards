@@ -64,6 +64,7 @@ def get_token_or_none_from_redis() -> tuple[str | None, str | None]:
         return token, expires_at
 
     else:
+        print('get_token_or_none_from_redis: NOne, none')
         return None, None
 
 
@@ -97,7 +98,8 @@ def get_yandex_token(oauth_token: str = settings.YA_OAUTH_TOKEN) -> str:
         set_token_to_redis(token_response)
     else:
         token_response = _fetch_yandex_token(oauth_token)
-        token = token_response.get('iamToken', "")
+
+    token = token_response.get('iamToken', "")
     return token
 
 

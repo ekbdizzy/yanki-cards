@@ -64,7 +64,6 @@ def get_token_or_none_from_redis() -> tuple[str | None, str | None]:
         return token, expires_at
 
     else:
-        print('get_token_or_none_from_redis: NOne, none')
         return None, None
 
 

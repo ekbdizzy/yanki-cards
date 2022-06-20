@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import styles from './InterviewPage.module.css';
 import {Body, Feedback, withLayout} from "../../layout";
 import {Badge, H, Helper, Input, Listener, P} from "../../components";
@@ -13,8 +13,8 @@ function InterviewPage(): JSX.Element {
         setWord(e.target.value);
     };
 
-    const fetchTranslate = async (phrase: string) => {
-        const url = 'http://localhost:8000/api/words/translate/';
+    const fetchTranslate = async (phrase: string): Promise<void> => {
+        const url = `/api/words/translate/`;
         const response = await fetch(url,
             {
                 method: 'post',
@@ -28,7 +28,7 @@ function InterviewPage(): JSX.Element {
     };
 
 
-    const submitWordToTranslate = (e: any) => {
+    const submitWordToTranslate = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         fetchTranslate(word);
     };
@@ -41,6 +41,7 @@ function InterviewPage(): JSX.Element {
     return <>
         <div className={styles.main}>
             <section>
+                <H tag={'h1'}>{process.env.REACT_APP_BASE_URL}</H>
                 <div>
                     <Badge>Career</Badge>
                     <Helper size='small' icon='update'>Change question</Helper>

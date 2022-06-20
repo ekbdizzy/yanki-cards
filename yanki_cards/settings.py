@@ -18,9 +18,15 @@ USE_X_FORWARDED_PORT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://localhost:3000",
+    'http://127.0.0.1',
+    'https://127.0.0.1',
+    'http://0.0.0.0',
+    'https://0.0.0.0',
+    'https://yanki-cards.ru',
 ]
+CORS_ALLOW_CREDENTIALS = False
+# CORS_ORIGIN_WHITELIST = ()
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

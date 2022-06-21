@@ -15,14 +15,14 @@ function InterviewPage(): JSX.Element {
     };
 
     const fetchThemes = async (): Promise<void> => {
-        const url = `${process.env.REACT_APP_BASE_URL}/api/themes`;
+        const url = `http://yanki-cards.ru/api/themes/`;
         const response = await fetch(url);
         const result = await response.json();
         setThemes(result);
     };
 
     const anotherFetchThemes = async (): Promise<void> => {
-        const url = `/api/themes`;
+        const url = `https://yanki-cards.ru/api/themes/`;
         const response = await fetch(url);
         const result = await response.json();
         console.log('another fetching');
@@ -31,7 +31,7 @@ function InterviewPage(): JSX.Element {
 
 
     const fetchTranslate = async (phrase: string): Promise<void> => {
-        const url1 = `http://127.0.0.1/api/words/translate/`;
+        const url1 = `https://yanki-cards.ru/api/words/translate/`
         const response = await fetch(url1,
             {
                 method: 'post',
@@ -40,20 +40,6 @@ function InterviewPage(): JSX.Element {
                     phrase: phrase
                 })
             });
-
-	const url2 = `http://127.0.0.1:8000/api/words/translate/`;
-        console.log('8000');
-        const response2 = await fetch(url2,
-            {
-                method: 'post',
-                headers: {'Content-type': 'application/json'},
-                body: JSON.stringify({
-                    phrase: phrase
-                })
-            });
-
-        const text2 = await response2.json();
-        setTranslation(text2[0].text);
     };
 
     const submitWordToTranslate = (e: FormEvent<HTMLFormElement>): void => {

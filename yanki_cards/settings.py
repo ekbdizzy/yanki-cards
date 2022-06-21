@@ -35,27 +35,25 @@ INSTALLED_APPS = [
     'feedback',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = [
-        'http://127.0.0.1',
-        'http://127.0.0.1:8000',
-        'https://yanki-cards.ru',
-        'http://159.223.216.119',
-        ]
-#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = False 
+CORS_ALLOWED_ORIGINS = [
+    "http://yanki-cards.ru",
+    "https://yanki-cards.ru",
+]
+
 CSRF_TRUSTED_ORIGINS = [
-        'http://127.0.0.1',
-        'http://127.0.0.1:8000',
-        'https://yanki-cards.ru',
-        'http://159.223.216.119',
-        ]
+    "http://yanki-cards.ru",
+    'https://yanki-cards.ru',
+]
+
+CORS_REPLACE_HTTPS_REFERER = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
@@ -75,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+#    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

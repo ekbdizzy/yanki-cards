@@ -36,10 +36,19 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1',
-    'http://127.0.0.1:3000',
-]
+CORS_ORIGIN_WHITELIST = [
+        'http://127.0.0.1',
+        'http://127.0.0.1:8000',
+        'https://yanki-cards.ru',
+        'http://159.223.216.119',
+        ]
+#CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+        'http://127.0.0.1',
+        'http://127.0.0.1:8000',
+        'https://yanki-cards.ru',
+        'http://159.223.216.119',
+        ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -62,8 +71,8 @@ IAMTOKEN = env('IAMTOKEN')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

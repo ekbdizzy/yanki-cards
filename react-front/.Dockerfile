@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:14-alpine
 WORKDIR ./react-front
 COPY . .
 RUN npm install

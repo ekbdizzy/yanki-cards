@@ -1,6 +1,6 @@
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import styles from './InterviewPage.module.css';
-import {Body, Feedback, withLayout} from "../../layout";
+import {withLayout} from "../../layout";
 import {Badge, H, Helper, Input, Listener, P} from "../../components";
 
 
@@ -8,13 +8,30 @@ function InterviewPage(): JSX.Element {
 
     const [translation, setTranslation] = useState<string>('');
     const [word, setWord] = useState<string>('');
+    const [themes, setThemes] = useState<string[]>([]);
 
-    const changeWord = (e: any) => {
+    const changeWord = (e: ChangeEvent<HTMLInputElement>) => {
         setWord(e.target.value);
     };
 
+    const fetchThemes = async (): Promise<void> => {
+        const url = `${process.env.REACT_APP_BASE_URL}/api/themes`;
+        const response = await fetch(url);
+        const result = await response.json();
+        setThemes(result);
+    };
+
+    const anotherFetchThemes = async (): Promise<void> => {
+        const url = `/api/themes`;
+        const response = await fetch(url);
+        const result = await response.json();
+        console.log('another fetching');
+        setThemes(result);
+    };
+
+
     const fetchTranslate = async (phrase: string): Promise<void> => {
-        const url = `/api/words/translate/`;
+        const url = `${process.env.REACT_APP_BASE_URL}/api/words/translate/`;
         const response = await fetch(url,
             {
                 method: 'post',
@@ -27,7 +44,6 @@ function InterviewPage(): JSX.Element {
         setTranslation(text[0].text);
     };
 
-
     const submitWordToTranslate = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         fetchTranslate(word);
@@ -36,14 +52,17 @@ function InterviewPage(): JSX.Element {
     useEffect(() => {
         const a = 2;
     }, [translation]);
-
+    useEffect(() => {
+        console.log(themes);
+    }, [themes]);
 
     return <>
         <div className={styles.main}>
             <section>
-                <H tag={'h1'}>{process.env.REACT_APP_BASE_URL}</H>
+                <H tag={'h1'}>{themes.toString()}</H>
                 <div>
-                    <Badge>Career</Badge>
+                    <Badge onClick={fetchThemes}>Career</Badge>
+                    <Badge onClick={anotherFetchThemes}>Another Badge</Badge>
                     <Helper size='small' icon='update'>Change question</Helper>
                 </div>
                 <H tag={'h1'}>What do you know about the capital of Great Britain?</H>
@@ -69,11 +88,6 @@ function InterviewPage(): JSX.Element {
                 <Helper size='medium' icon='save'>Add new card</Helper>
             </section>
         </div>
-
-
-        {/*<Body>*/}
-        {/*    <Feedback/>*/}
-        {/*</Body>*/}
     </>;
 }
 

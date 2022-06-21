@@ -17,17 +17,6 @@ USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1',
-    'https://127.0.0.1',
-    'http://0.0.0.0',
-    'https://0.0.0.0',
-    'https://yanki-cards.ru',
-]
-CORS_ALLOW_CREDENTIALS = False
-# CORS_ORIGIN_WHITELIST = ()
-
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +33,12 @@ INSTALLED_APPS = [
     'words',
     'questions',
     'feedback',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1',
+    'http://127.0.0.1:3000',
 ]
 
 REST_FRAMEWORK = {

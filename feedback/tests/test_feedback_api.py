@@ -27,7 +27,7 @@ class FeedbackTestCase(APITestCase):
             "text": "Some description of problem",
         }
         data = json.dumps(feedback)
-        self.client.force_login(self.user)
+        self.client.force_authenticate(self.user)
 
         self.assertEqual(Feedback.objects.all().count(), 1)
         response = self.client.post(
@@ -48,7 +48,7 @@ class FeedbackTestCase(APITestCase):
             "text": "Some description of problem",
         }
         data = json.dumps(feedback)
-        self.client.force_login(self.user)
+        self.client.force_authenticate(self.user)
         response = self.client.post(
             url,
             data=data,

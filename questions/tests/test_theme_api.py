@@ -53,7 +53,7 @@ class ThemeTestCase(APITestCase):
         self.assertEqual(serializer_data, response.data)
 
         # Authenticated
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         themes = [
             self.theme_public_1,
             self.theme_public_2,
@@ -75,11 +75,11 @@ class ThemeTestCase(APITestCase):
             data=data,
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(Theme.objects.all().count(), 4)
 
         # Authenticated
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.post(
             self.url_list_create,
             data=data,
@@ -97,11 +97,11 @@ class ThemeTestCase(APITestCase):
         # Unauthenticated
         response = self.client.patch(self.url_detail, data=update_data)
         theme = Theme.objects.get(id=self.theme_private_1.id)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(theme.title, self.theme_private_1.title)
 
         # Authenticated
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.patch(self.url_detail, data=update_data)
         theme = Theme.objects.get(id=self.theme_private_1.id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -112,11 +112,11 @@ class ThemeTestCase(APITestCase):
 
         # Unauthenticated
         response = self.client.delete(self.url_detail)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(Theme.objects.all().count(), 4)
 
         # Authenticated
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.delete(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Theme.objects.all().count(), 3)

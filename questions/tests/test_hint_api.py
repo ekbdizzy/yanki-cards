@@ -41,10 +41,10 @@ class HintTestCase(APITestCase):
 
         # Unauthorized
         response = self.client.get(self.url_detail)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # Authorized
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.get(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         serialized_data = HintSerializer(self.hint_1).data
@@ -64,11 +64,11 @@ class HintTestCase(APITestCase):
             data=data,
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(Hint.objects.all().count(), 2)
 
         # Authorized not author
-        self.client.force_login(self.user2)
+        self.client.force_authenticate(self.user2)
         response = self.client.post(
             self.url_create,
             data=data,
@@ -78,7 +78,7 @@ class HintTestCase(APITestCase):
         self.assertEqual(Hint.objects.all().count(), 2)
 
         # Authorized author
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.post(
             self.url_create,
             data=data,
@@ -91,7 +91,7 @@ class HintTestCase(APITestCase):
     def test_update(self):
         hint_data = {"text": "Updated text"}
         data = json.dumps(hint_data)
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.patch(
             self.url_detail,
             data=data,
@@ -103,7 +103,7 @@ class HintTestCase(APITestCase):
 
     def test_delete(self):
         self.assertEqual(Hint.objects.all().count(), 2)
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.delete(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Hint.objects.all().count(), 1)

@@ -35,8 +35,10 @@ INSTALLED_APPS = [
     'feedback',
 ]
 
-CORS_ALLOW_CREDENTIALS = False 
+CORS_ALLOW_CREDENTIALS = False
 CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
     "http://yanki-cards.ru",
     "https://yanki-cards.ru",
 ]
@@ -73,7 +75,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-#    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

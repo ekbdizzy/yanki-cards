@@ -56,7 +56,7 @@ class WordAPITestCase(APITestCase):
 
     def test_create_new_translation_view(self):
         url = reverse('create-translation')
-        self.client.force_login(self.user)
+        self.client.force_authenticate(self.user)
 
         # stack does not exists:
         phrases_request = [
@@ -129,7 +129,7 @@ class WordAPITestCase(APITestCase):
 
     def test_get_translations_stacks_list(self):
         url = reverse('translations-list')
-        self.client.force_login(self.user)
+        self.client.force_authenticate(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         translations_stacks = TranslationsStack.objects.filter(user=self.user)
@@ -145,14 +145,14 @@ class WordAPITestCase(APITestCase):
             'delete-translation',
             kwargs={'pk': self.translations_stack_2.id},
         )
-        self.client.force_login(self.user)
+        self.client.force_authenticate(self.user)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TranslationsStack.objects.all().count(), 2)
 
     def test_get_anki_cards(self):
         url = reverse('get-anki-cards')
-        self.client.force_login(self.user)
+        self.client.force_authenticate(self.user)
 
         # request without param lang
         response = self.client.get(

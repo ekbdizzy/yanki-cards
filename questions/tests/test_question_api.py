@@ -54,10 +54,10 @@ class QuestionTestCase(APITestCase):
 
         # Unauthorized
         response = self.client.get(self.url_detail)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # Authorized
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.get(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         serialized_data = QuestionSerializer(self.question_1_theme_1).data
@@ -77,11 +77,11 @@ class QuestionTestCase(APITestCase):
             data=data,
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(Question.objects.all().count(), 4)
 
         # Authorized, not Author
-        self.client.force_login(self.user2)
+        self.client.force_authenticate(self.user2)
         response = self.client.post(
             self.url_create,
             data=data,
@@ -91,7 +91,7 @@ class QuestionTestCase(APITestCase):
         self.assertEqual(Question.objects.all().count(), 4)
 
         # Authorized, Author
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.post(
             self.url_create,
             data=data,
@@ -114,10 +114,10 @@ class QuestionTestCase(APITestCase):
             self.url_detail,
             data=update_data,
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # Authorized, not author
-        self.client.force_login(self.user2)
+        self.client.force_authenticate(self.user2)
         response = self.client.patch(
             self.url_detail,
             data=update_data,
@@ -125,7 +125,7 @@ class QuestionTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # Authorized, author
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.patch(
             self.url_detail,
             data=update_data,
@@ -136,7 +136,7 @@ class QuestionTestCase(APITestCase):
 
     def test_delete(self):
         self.assertEqual(Question.objects.all().count(), 4)
-        self.client.force_login(self.user1)
+        self.client.force_authenticate(self.user1)
         response = self.client.delete(self.url_detail)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Question.objects.all().count(), 3)

@@ -5,3 +5,4 @@ export * from './H/H';
 export * from './P/P';
 export * from './Input/Input';
 export * from './Listener/Listener';
+export * from './WordTranslation/WordTranslation';

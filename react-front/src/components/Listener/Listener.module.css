@@ -1,5 +1,6 @@
 .listener {
   max-width: 400px;
+  transition: ease-out;
 }
 
 .listener img {

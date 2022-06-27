@@ -6,7 +6,6 @@ import {Badge, H, Helper, Input, Listener, P, WordTranslation} from "../../compo
 
 function InterviewPage(): JSX.Element {
 
-
     return <>
         <div className={styles.main}>
             <section>

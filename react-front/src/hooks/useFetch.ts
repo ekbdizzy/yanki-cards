@@ -1,42 +1,51 @@
 import {useEffect, useState} from "react";
+import {To} from "react-router-dom";
+
+export interface requestBody extends Record<string, File | string | number | boolean> {
+}
 
 interface useFetchOptions {
     isLoading: boolean
-    response: string | null
-    error: string | null
+    response: requestBody | null
+    error: requestBody | string | null
 }
 
+interface Token {
+    access: string,
+    refresh: string
+}
 
-export default (url: string): [useFetchOptions, ((options: object) => Promise<void>)] => {
-
+export const useFetch = (url: string): [useFetchOptions, ((options: requestBody) => void)] => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [response, setResponse] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [response, setResponse] = useState<requestBody | null>(null);
+    const [error, setError] = useState<requestBody | string | null>(null);
+    const [options, setOptions] = useState<requestBody>({});
 
-    const doFetch = async (options: Record<string, any>) => {
+    const doFetch = (options: requestBody = {}): void => {
+        setOptions(options);
         setIsLoading(true);
-        const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/`;
-        const response = await fetch(`${baseUrl}${url}`,
-            {
-                method: 'post',
-                headers: {'Content-type': 'application/json'},
-                body: JSON.stringify({...options})
-            });
-        if (response.ok) {
-            const data = await response.json();
-            setResponse(await data);
-            setIsLoading(false);
-            console.log(data);
-        } else {
-            setError(await response.json());
-            setIsLoading(false);
-            console.log(await response);
-        }
     };
 
     useEffect(() => {
-        return;
-    }, [isLoading]);
+        if (!isLoading) {
+            return;
+        }
+
+        const fetchData = async <T>(options: requestBody = {}): Promise<T> => {
+            const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/`;
+            const response = await fetch(`${baseUrl}${url}`,
+                {
+                    method: 'post',
+                    headers: {'Content-type': 'application/json'},
+                    body: JSON.stringify({...options})
+                });
+            const data = await response.json();
+            setResponse(data);
+            setIsLoading(false);
+            return data;
+        };
+        const result = fetchData<Token>(options);
+    }, [isLoading, options, url]);
 
     return [{isLoading, response, error}, doFetch];
 };

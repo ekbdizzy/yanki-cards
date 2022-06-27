@@ -1,6 +1,6 @@
 import styles from './WordTranslation.module.css';
 import {Input, P, Helper} from '../../components';
-import React, {ChangeEvent, FormEvent, useState} from "react";
+import React, {ChangeEvent, FormEvent, useCallback, useState} from "react";
 
 export const WordTranslation = () => {
     const [translation, setTranslation] = useState<string>('');
@@ -9,7 +9,7 @@ export const WordTranslation = () => {
     const [addTranslateButton, setAddTranslateButton] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const changeWord = (e: ChangeEvent<HTMLInputElement>) => {
+    const changeWord = (e: React.ChangeEvent<HTMLInputElement>) => {
         setWord(e.target.value);
         if (e.target.value == '') {
             setAddNewCardButton(false);

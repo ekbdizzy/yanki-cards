@@ -10,7 +10,8 @@ export const Menu = ({...props}: MenuProps): JSX.Element => {
         {name: "About", route: '/about'},
         {name: "Interview", route: '/interview'},
         {name: "Profile", route: '/profile'},
-        {name: "My words", route: '/words'}
+        {name: "My words", route: '/words'},
+        {name: "Login", route: '/auth/login'}
     ];
 
     const buildMenu = (menuItems: MenuItem[]): JSX.Element => {

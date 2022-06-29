@@ -1,27 +1,25 @@
 import {useEffect, useState} from "react";
-import {To} from "react-router-dom";
-
-export interface requestBody extends Record<string, File | string | number | boolean> {
-}
 
 interface useFetchOptions {
     isLoading: boolean
-    response: requestBody | null
-    error: requestBody | string | null
+    response: Response | null
+    error: Response | null
 }
 
-interface Token {
-    access: string,
+
+interface Token extends Response {
+    access: string
     refresh: string
 }
 
-export const useFetch = (url: string): [useFetchOptions, ((options: requestBody) => void)] => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [response, setResponse] = useState<requestBody | null>(null);
-    const [error, setError] = useState<requestBody | string | null>(null);
-    const [options, setOptions] = useState<requestBody>({});
 
-    const doFetch = (options: requestBody = {}): void => {
+export const useFetch = <T extends Response>(url: string): [useFetchOptions, ((options: RequestInit) => void)] => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [response, setResponse] = useState<Response | null>(null);
+    const [error, setError] = useState<Response | null>(null);
+    const [options, setOptions] = useState<RequestInit>({});
+
+    const doFetch = (options: RequestInit = {}): void => {
         setOptions(options);
         setIsLoading(true);
     };
@@ -31,21 +29,24 @@ export const useFetch = (url: string): [useFetchOptions, ((options: requestBody)
             return;
         }
 
-        const fetchData = async <T>(options: requestBody = {}): Promise<T> => {
-            const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/`;
-            const response = await fetch(`${baseUrl}${url}`,
-                {
-                    method: 'post',
-                    headers: {'Content-type': 'application/json'},
-                    body: JSON.stringify({...options})
-                });
+        const fetchData = async <T>(options: RequestInit = {}): Promise<T> => {
+            const response = await fetch(url, options);
             const data = await response.json();
             setResponse(data);
             setIsLoading(false);
             return data;
         };
-        const result = fetchData<Token>(options);
+        fetchData<T>(options);
     }, [isLoading, options, url]);
+
+    useEffect(() => {
+        if (!response) {
+            return;
+        }
+        localStorage.setItem('token', (response as Token).access);
+
+
+    }, [response]);
 
     return [{isLoading, response, error}, doFetch];
 };

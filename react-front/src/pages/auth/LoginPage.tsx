@@ -1,29 +1,56 @@
 import {withLayout} from "../../layout";
-import {H, Helper, Input} from '../../components';
+import {H} from '../../components';
 import styles from './Auth.module.css';
 import React, {FormEvent, useEffect, useState} from "react";
-import {useFetch, requestBody} from "../../hooks/useFetch";
+import {useFetch} from "../../hooks/useFetch";
+import {useNavigate} from "react-router-dom";
+import {API, withBaseUrl} from '../../api';
+import {fetchUserData} from "../../api/services";
 
+
+interface Token extends Response {
+    access: string
+    refresh: string
+}
 
 function LoginPage(): JSX.Element {
 
-    const [token, setToken] = useState<object>({});
-    const [{isLoading, response, error}, doFetch] = useFetch('auth/jwt/create/');
+    const [token, setToken] = useState<string | null>(null);
+    const [{isLoading, response, error}, doFetch] = useFetch<Token>(withBaseUrl(API.auth.create_jwt));
+    const [user, setUser] = useState({});
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [isLoadingUser, setIsLoadingUser] = useState<boolean>(false);
+
+    const navigate = useNavigate();
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const body: requestBody = {};
+        const body: Record<string, unknown> = {};
         const formData = new FormData(e.target as HTMLFormElement);
         formData.forEach((value, key) => body[key] = value);
-        doFetch(body);
+        doFetch({
+            method: 'post',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({...body})
+        });
     };
 
     useEffect(() => {
         if (!response) {
             return;
         }
-        localStorage.setItem('token', response.access.toString());
+
     }, [response]);
+
+
+    useEffect(() => {
+        if (!token) {
+            return;
+        }
+        localStorage.setItem('token', token);
+        const user = fetchUserData(token);
+        setUser(user);
+    }, [token]);
 
 
     return <>

@@ -112,7 +112,7 @@ class TranslationsStackDeleteView(DestroyAPIView):
     serializer_class = TranslationsStackSerializer
 
     def get_queryset(self):
-        return TranslationsStack.objects.filter(user=self.request.user)
+        return TranslationsStack.objects.filter(user=self.request.user.id)
 
 
 def _get_csv_file_name(request):

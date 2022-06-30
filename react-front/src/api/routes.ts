@@ -4,7 +4,7 @@ const API = {
     auth: {
         create_jwt: `auth/jwt/create/`,
         verify: 'auth/jwt/verify/',
-        getUser: 'auth/users/',
+        getUser: 'auth/users/me/',
     },
 };
 

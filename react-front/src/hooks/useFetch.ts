@@ -39,15 +39,6 @@ export const useFetch = <T extends Response>(url: string): [useFetchOptions, ((o
         fetchData<T>(options);
     }, [isLoading, options, url]);
 
-    useEffect(() => {
-        if (!response) {
-            return;
-        }
-        localStorage.setItem('token', (response as Token).access);
-
-
-    }, [response]);
-
     return [{isLoading, response, error}, doFetch];
 };
 

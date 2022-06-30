@@ -39,18 +39,10 @@ function LoginPage(): JSX.Element {
         if (!response) {
             return;
         }
-
+        localStorage.setItem('token', (response as Token).access);
+        navigate('/');
     }, [response]);
 
-
-    useEffect(() => {
-        if (!token) {
-            return;
-        }
-        localStorage.setItem('token', token);
-        const user = fetchUserData(token);
-        setUser(user);
-    }, [token]);
 
 
     return <>

@@ -114,7 +114,10 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': False,
-    'SERIALIZERS': {'user': 'users.serializers.UserSerializer'},
+    'SERIALIZERS': {
+        'user': 'users.serializers.UserSerializer',
+        "current_user": 'users.serializers.UserSerializer',
+    },
     'TOKEN_MODEL': None,
 }
 

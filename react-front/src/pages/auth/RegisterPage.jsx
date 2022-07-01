@@ -1,12 +1,10 @@
-import {withLayout} from "../../layout";
-import {H} from '../../components';
-import React from "react";
+import { withLayout } from '../../layout';
+import React from 'react';
 
-function RegisterPage(): JSX.Element {
-    return <>
-        <H tag='h1'>Register Page</H>
-    </>;
-}
+const RegisterPage = () => {
+  return <>
+    <h tag="h1">Register Page</h>
+  </>;
+};
 
 export default withLayout(RegisterPage);
-

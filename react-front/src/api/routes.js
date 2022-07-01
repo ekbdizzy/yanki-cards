@@ -8,10 +8,8 @@ const API = {
     },
 };
 
-const withBaseUrl = (url: string): string => {
+const withBaseUrl = (url) => {
     return `${baseUrl}${url}`;
 };
 
-
 export {API, withBaseUrl};
-

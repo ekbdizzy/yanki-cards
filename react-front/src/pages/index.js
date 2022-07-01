@@ -8,7 +8,6 @@ import LoginPage from "./auth/LoginPage";
 import LogoutPage from "./auth/LogoutPage";
 import RegisterPage from "./auth/RegisterPage";
 
-
 export {
     MainPage,
     InterviewPage,
@@ -18,4 +17,5 @@ export {
     LoginPage,
     LogoutPage,
     RegisterPage,
-    Page404};
+    Page404
+};

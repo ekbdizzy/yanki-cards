@@ -1,20 +1,18 @@
-import styles from './Layout.module.css';
-// import cn from 'classnames';
-import { Header, Feedback, Footer } from '../../layout';
+import styles from './Layout.module.scss';
+import { Header, Footer, Body } from '../../layout';
+import { TopMenu } from '../../components';
 import React from 'react';
 
 export const Layout = ({ children }) => {
-  return <>
-    <div className={styles.main}>
-      <Header>
-      </Header>
-      <div className={styles.wrapper}>
-        {children}
-      </div>
-      <Feedback/>
-    </div>
+  return <div className={styles.wrapper}>
+    <Header>
+      <TopMenu/>
+    </Header>
+    <Body>
+      {children}
+    </Body>
     <Footer/>
-  </>;
+  </div>;
 };
 
 export const withLayout = (Component) => {

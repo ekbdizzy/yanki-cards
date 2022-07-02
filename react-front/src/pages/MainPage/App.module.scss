@@ -1,0 +1,6 @@
+.parent {
+  @apply block my-10 bg-purple-800 px-10 py-2 rounded-lg text-white
+      bg-opacity-80 hover:bg-opacity-100 transition-all ease-in-out
+      md:bg-green-500 dark:bg-red-400
+}
+

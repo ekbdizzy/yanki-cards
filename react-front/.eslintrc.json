@@ -1,25 +1,30 @@
 {
-	"root": true,
-	"parser": "@typescript-eslint/parser",
-	"plugins": [
-		"@typescript-eslint"
-	],
-	"rules": {
-		"semi": "off",
-		"@typescript-eslint/semi": [
-			"warn"
-		],
-		"@typescript-eslint/no-empty-interface": [
-			"error",
-			{
-				"allowSingleExtends": true
-			}
-		]
-	},
-	"extends": [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended",
-		"plugin:react-hooks/recommended"
-	]
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "standard"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+      "spaced-comment": "off",
+      "no-trailing-spaces": "warn",
+      "no-multiple-empty-lines": ["error", { "max": 5, "maxEOF": 5 }],
+      "no-unused-vars": "warn",
+      "quote-props": ["error", "as-needed"],
+      "react/prop-types": "off",
+      "semi": [2, "always"],
+      "comma-dangle": ["error", "always-multiline"]
+    }
 }

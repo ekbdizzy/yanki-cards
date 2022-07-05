@@ -10,7 +10,7 @@ export const ProfileMenu = () => {
       <Menu.Button className={styles.menu_button}>
         <div className="flex">
           <UserIcon className="relative h-6 pr-1"/>
-          <span className="">Profile</span>
+          <span>Profile</span>
         </div>
       </Menu.Button>
       <Transition
@@ -23,7 +23,7 @@ export const ProfileMenu = () => {
         leaveTo="opacity-0 translate-y-1"
       >
         <Menu.Items className="absolute" as="ul">
-          <div className="bg-white border-2 border-indigo-200 px-3 -mr-5">
+          <div className="bg-slate-50 mb-3 drop-shadow-2xl">
             <Menu.Item as="li" className={styles.menu_item}>
               <Link to="/profile/" className={styles.link}>My words</Link>
             </Menu.Item>

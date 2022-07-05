@@ -10,14 +10,16 @@
 
 
 .menu_item {
-  @apply my-3
+  @apply py-3 px-8 transition ease-in-out;
+
+  &:hover {
+    @apply bg-fuchsia-500
+  }
 }
 
 
 .link {
   @apply whitespace-nowrap;
 
-  &:hover {
-    @apply bg-fuchsia-500
-  }
+
 }

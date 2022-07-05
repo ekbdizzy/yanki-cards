@@ -2,16 +2,14 @@ import styles from './App.module.scss';
 import { withLayout } from '../../layout';
 import React, { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
-// import { API, withBaseUrl } from '../../api';
 
 const MainPage = () => {
   return (
     <div className="p-10 border-2 border-purple-600">
-      <h>Main Page</h>
+      <h1>Main Page</h1>
       <button className={styles.parent}>Login</button>
       <Popover>
         <Popover.Button>Some button</Popover.Button>
-
         <Transition
                     as={Fragment}
                     enter="transition ease-out duration-200"

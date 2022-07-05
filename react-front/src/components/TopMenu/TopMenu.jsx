@@ -2,6 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Popover, Transition, Menu } from '@headlessui/react';
 import Logo from '../../assets/logo.svg';
+import { ProfileMenu } from './ProfileMenu';
+import { URLS } from '../../api';
+import styles from './TopMenu.module.scss';
+import cn from 'classnames';
 import {
   BookmarkAltIcon,
   CalendarIcon,
@@ -16,58 +20,35 @@ import {
   ViewGridIcon,
   XIcon,
 } from '@heroicons/react/outline';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+import { UserIcon, ChevronDownIcon } from '@heroicons/react/solid';
 
-const LoginMenu = () => {
-  return (
-    <div className="flex">
-      <Link to="/auth/login/">Login</Link>
-      <Link to="/auth/register/">Sign Up</Link>
-    </div>
-  );
-};
+const loginMenuItems = [
+  { name: 'Login', href: URLS.auth.login },
+  { name: 'Sign Up', href: URLS.auth.register },
+];
 
-const ProfileMenu = () => {
-  return (
-    <Popover className="relative bg-white">
-      <Popover.Button className="px-8">
-        <span>Profile</span>
-      </Popover.Button>
-      <Popover.Panel as="div">
-        <div className="absolute mt-5 min-h-100">
-          Panel
-        </div>
-      </Popover.Panel>
-    </Popover>
-  );
-};
+const menuItems = [
+  { name: 'Main', href: '/' },
+  { name: 'About', href: URLS.about },
+  { name: 'Themes', href: URLS.themes },
+  { name: 'Ask me!', href: URLS.interview },
+];
 
 export const TopMenu = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   useEffect(() => {
-    console.log(isLoggedIn);
   }, [isLoggedIn]);
-
-  const menuItems = [
-    { name: 'Main', url: '/' },
-    { name: 'About', url: '/about/' },
-    { name: 'Themes', url: '/themes/' },
-  ];
 
   const buildMenu = (menuItems) => {
     return <ul className="flex">
-      {menuItems.map(({ name, url }) => {
-        return <li key={url} className="px-8">
-          <NavLink to={url}>{name}</NavLink>
+      {menuItems.map(({ name, href }) => {
+        return <li key={href}>
+          <NavLink to={href}
+                   className={({ isActive }) =>
+                     isActive ? cn(styles.menu_button, styles.active) : styles.menu_button}
+          >{name}</NavLink>
         </li>;
       })}
-      <li key="askMe" className="px-8">
-        <NavLink to={/askMe/} onClick={(e) => {
-          e.preventDefault();
-          setIsLoggedIn(!isLoggedIn);
-        }
-        }>Ask Me!</NavLink>
-      </li>
     </ul>;
   };
 
@@ -75,21 +56,21 @@ export const TopMenu = () => {
     <div className="mx-auto my-6 px-0 text-lg font-medium text-indigo-800">
       <div className="flex justify-between items-center">
         <div className="justify-start">
-          <Link to="/">
+          <Link to="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsLoggedIn(!isLoggedIn);
+                }}>
             <img className="h-10 w-auto sm:h-10"
                  alt="Yanki Cards"
-                 src={Logo}/>
+                 src={Logo}
+            />
           </Link>
         </div>
-        {/*<Popover.Group as="nav">*/}
-        {/*  <Popover/>*/}
-        {/*</Popover.Group>*/}
         <div className="flex">
           {buildMenu(menuItems)}
         </div>
-        {isLoggedIn ? <LoginMenu/> : <ProfileMenu/>}
-
-
+        {isLoggedIn ? buildMenu(loginMenuItems) : <ProfileMenu/>}
       </div>
     </div>
   );

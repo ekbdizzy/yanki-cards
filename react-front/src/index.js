@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import { URLS } from './api';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import {
   MainPage,
@@ -22,18 +23,18 @@ root.render(
       <Routes>
         <Route path="/"
                element={<MainPage/>}/>
-        <Route path="/about"
+        <Route path={URLS.about}
                element={<AboutPage/>}/>
-        <Route path="/profile"
+        <Route path={URLS.profile}
                element={<ProfilePage/>}/>
-        <Route path="/words"
+        <Route path={URLS.words}
                element={<WordsPage/>}/>
-        <Route path="/interview"
+        <Route path={URLS.interview}
                element={<InterviewPage/>}/>
         <Route path="auth">
           <Route index element={<Page404/>}/>
-          <Route path="login" element={<LoginPage/>}/>
-          <Route path="register" element={<RegisterPage/>}/>
+          <Route path={URLS.auth.login} element={<LoginPage/>}/>
+          <Route path={URLS.auth.register} element={<RegisterPage/>}/>
         </Route>
         <Route path="*"
                element={<Page404/>}/>

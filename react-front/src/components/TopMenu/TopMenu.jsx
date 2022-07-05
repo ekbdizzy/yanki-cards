@@ -2,6 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Popover, Transition, Menu } from '@headlessui/react';
 import Logo from '../../assets/logo.svg';
+import { ProfileMenu } from './ProfileMenu';
+import { URLS } from '../../api';
+import styles from './TopMenu.module.scss';
+import cn from 'classnames';
 import {
   BookmarkAltIcon,
   CalendarIcon,
@@ -17,75 +21,34 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { UserIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import { flex } from 'stylelint-order/rules/shorthandData';
 
-const LoginMenu = () => {
-  return (
-    <div className="flex">
-      <Link to="/auth/login/">Login</Link>
-      <Link to="/auth/register/">Sign Up</Link>
-    </div>
-  );
-};
+const loginMenuItems = [
+  { name: 'Login', href: URLS.auth.login },
+  { name: 'Sign Up', href: URLS.auth.register },
+];
 
-const ProfileMenu = () => {
-  return (
-    <Menu className="relative bg-white" as="div">
-      <Menu.Button className="relative">
-        <div className='flex px-6 py-3 hover:bg-indigo-100'>
-          <UserIcon className="relative h-6"/>
-          <span>Profile</span>
-        </div>
-      </Menu.Button>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 translate-y-1"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-1"
-      >
-
-        <Menu.Items className="absolute" as="ul">
-          <div className="bg-white border-2 border-indigo-200 p-6 my-2 ">
-            <Menu.Item as="li"><Link to="/profile/">Settings</Link></Menu.Item>
-            <Menu.Item as="li"><Link to="/profile/">Settings</Link></Menu.Item>
-            <Menu.Item as="li"><Link to="/profile/">Settings</Link></Menu.Item>
-            <Menu.Item as="li"><Link to="/profile/">Settings</Link></Menu.Item>
-          </div>
-        </Menu.Items>
-      </Transition>
-    </Menu>
-  );
-};
+const menuItems = [
+  { name: 'Main', href: '/' },
+  { name: 'About', href: URLS.about },
+  { name: 'Themes', href: URLS.themes },
+  { name: 'Ask me!', href: URLS.interview },
+];
 
 export const TopMenu = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   useEffect(() => {
-    console.log(isLoggedIn);
   }, [isLoggedIn]);
-
-  const menuItems = [
-    { name: 'Main', url: '/' },
-    { name: 'About', url: '/about/' },
-    { name: 'Themes', url: '/themes/' },
-  ];
 
   const buildMenu = (menuItems) => {
     return <ul className="flex">
-      {menuItems.map(({ name, url }) => {
-        return <li key={url} className="px-8">
-          <NavLink to={url}>{name}</NavLink>
+      {menuItems.map(({ name, href }) => {
+        return <li key={href}>
+          <NavLink to={href}
+                   className={({ isActive }) =>
+                     isActive ? cn(styles.menu_button, styles.active) : styles.menu_button}
+          >{name}</NavLink>
         </li>;
       })}
-      <li key="askMe" className="px-8">
-        <NavLink to={/askMe/} onClick={(e) => {
-          e.preventDefault();
-          setIsLoggedIn(!isLoggedIn);
-        }
-        }>Ask Me!</NavLink>
-      </li>
     </ul>;
   };
 
@@ -93,21 +56,21 @@ export const TopMenu = () => {
     <div className="mx-auto my-6 px-0 text-lg font-medium text-indigo-800">
       <div className="flex justify-between items-center">
         <div className="justify-start">
-          <Link to="/">
+          <Link to="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsLoggedIn(!isLoggedIn);
+                }}>
             <img className="h-10 w-auto sm:h-10"
                  alt="Yanki Cards"
-                 src={Logo}/>
+                 src={Logo}
+            />
           </Link>
         </div>
-        {/*<Popover.Group as="nav">*/}
-        {/*  <Popover/>*/}
-        {/*</Popover.Group>*/}
         <div className="flex">
           {buildMenu(menuItems)}
         </div>
-        {isLoggedIn ? <LoginMenu/> : <ProfileMenu/>}
-
-
+        {isLoggedIn ? buildMenu(loginMenuItems) : <ProfileMenu/>}
       </div>
     </div>
   );

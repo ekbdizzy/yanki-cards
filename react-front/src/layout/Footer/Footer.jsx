@@ -4,11 +4,11 @@ import React from 'react';
 
 export const Footer = ({ children, ...props }) => {
   return (
-    <footer className={cn(styles.footer, {})}
-            {...props}>
-      Some info in footer
-      {children}
-      footer
-    </footer>
+    <div className="bg-indigo-800 w-screen">
+      <footer className="max-w-7xl m-auto bg-indigo-800 text-white">
+        footer
+        {children}
+      </footer>
+    </div>
   );
 };

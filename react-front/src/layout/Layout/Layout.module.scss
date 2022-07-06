@@ -1,3 +1,9 @@
+.layout {
+  @apply flex min-h-screen;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .wrapper {
-  @apply container mx-auto px-6
+  @apply container mx-auto max-w-7xl;
 }

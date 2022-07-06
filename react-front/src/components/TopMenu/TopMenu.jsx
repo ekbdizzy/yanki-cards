@@ -53,8 +53,8 @@ export const TopMenu = () => {
   };
 
   return (
-    <div className="mx-auto my-6 px-0 text-lg font-medium text-indigo-800">
-      <div className="flex justify-between items-center">
+    <div className="py-6 px-0 text-lg font-medium text-indigo-800">
+      <div className="flex justify-between items-center h-11">
         <div className="justify-start">
           <Link to="/"
                 onClick={(e) => {

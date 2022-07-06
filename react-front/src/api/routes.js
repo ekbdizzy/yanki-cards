@@ -19,6 +19,7 @@ const API = {
     verify: 'auth/jwt/verify/',
     getUser: 'auth/users/me/',
   },
+  translate: 'words/translate/',
 };
 
 const withBaseUrl = (url) => {

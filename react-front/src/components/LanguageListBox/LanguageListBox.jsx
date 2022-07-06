@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 
@@ -10,13 +10,17 @@ const languages = [
   // { language: 'German' },
 ];
 
+
 export const LanguageListBox = () => {
   const [selected, setSelected] = useState(languages[0]);
-  const [code, setCode] = useState(selected.code);
 
   return (
     <div className="w-60">
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox
+        value={selected}
+        onChange={setSelected}
+        name="language"
+      >
         <div className="relative mt-1">
           <Listbox.Button
             className="relative w-full cursor-pointer rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">

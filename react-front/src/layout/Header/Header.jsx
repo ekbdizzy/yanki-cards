@@ -2,10 +2,9 @@ import styles from './Header.module.css';
 import React from 'react';
 import cn from 'classnames';
 
-export const Header = ({ children, ...props }) => {
+export const Header = ({ children }) => {
   return (
-    <header className={cn(styles.header, {})}
-            {...props}>
+    <header className='w-full'>
       {children}
     </header>);
 };

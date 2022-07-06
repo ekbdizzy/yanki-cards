@@ -15,7 +15,7 @@ export const Question = () => {
       <div className="mb-10">
         <Htag>Tell me about yourself and what do you think about global warmness?</Htag>
       </div>
-      <Button color="fuchsia" icon="refresh">What do you think about global warmness?</Button>
+      <Button color="fuchsia" icon="refresh" size='large'>What do you think about global warmness?</Button>
     </section>
   );
 };

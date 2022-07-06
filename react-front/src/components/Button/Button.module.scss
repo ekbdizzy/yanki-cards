@@ -1,0 +1,24 @@
+.button {
+  @apply flex items-center w-fit mr-5;
+
+  &:hover .icon {
+    @apply animate-spin;
+  }
+
+}
+
+.title {
+  @apply font-medium mr-1.5;
+}
+
+.amber {
+  @apply text-amber-600;
+}
+
+.fuchsia {
+  @apply text-fuchsia-700;
+}
+
+.icon {
+  @apply w-8 p-1.5 bg-yellow-200 rounded-2xl text-amber-600;
+}

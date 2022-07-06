@@ -6,11 +6,13 @@ import React from 'react';
 export const Layout = ({ children }) => {
   return <>
     <div className={styles.layout}>
+
       <div className={styles.wrapper}>
         <Header>
           <TopMenu/>
         </Header>
       </div>
+
       <div className={styles.wrapper}>
         <Body>
           {children}

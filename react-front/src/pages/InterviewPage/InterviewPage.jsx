@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './InterviewPage.module.css';
 import { withLayout } from '../../layout';
-import { Badge, Button, Htag } from '../../components';
+import { Badge, Button, Htag, Question } from '../../components';
+import Duck from '../../assets/images/duck.png';
+import { URLS } from '../../api';
 
 const InterviewPage = () => {
   return (
     <>
-      <div className={styles.main}>
-        <section>
-          <div className="flex items-center">
-            <Badge>Career</Badge>
-            <Button icon="refresh" >New question</Button>
-          </div>
-          <Htag>Tell me about yourself and what do you think about global warmness?</Htag>
-          <Button color='fuchsia' icon="refresh">What do you think about global warmness?</Button>
+      <div className="flex h-full">
+        <Question/>
+        <section className="basis-1/2 p-10">
+          <img src={Duck} className='max-h-96 mx-auto' alt="Duck"/>
         </section>
       </div>
     </>

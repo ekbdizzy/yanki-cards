@@ -1,18 +1,25 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CurrentTranslationContext } from '../../context';
 
 const languages = [
   { language: 'Translate to english', code: 'en' },
   { language: 'Перевести на русский', code: 'ru' },
   { language: 'Türkçeye çevir', code: 'tr' },
-  // { language: 'Spain' },
-  // { language: 'German' },
+  { language: 'Spain', code: 'sp' },
 ];
-
 
 export const LanguageListBox = () => {
   const [selected, setSelected] = useState(languages[0]);
+  const [translation, setTranslation] = useContext(CurrentTranslationContext);
+
+  useEffect(() => {
+    console.log('select');
+    if (!translation) { return; };
+    setTranslation(null);
+    console.log(translation);
+  }, [selected]);
 
   return (
     <div className="w-60">

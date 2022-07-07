@@ -15,10 +15,8 @@ export const LanguageListBox = () => {
   const [translation, setTranslation] = useContext(CurrentTranslationContext);
 
   useEffect(() => {
-    console.log('select');
     if (!translation) { return; };
     setTranslation(null);
-    console.log(translation);
   }, [selected]);
 
   return (

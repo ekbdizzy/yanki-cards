@@ -16,20 +16,14 @@ export const TranslationForm = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const body = {};
-    // convert language[code] to language_code
     formData.forEach((value, key) => {
+      // convert 'language[code]' --> 'language_code'
       key = key.replace('[', '_').replace(']', '');
       body[key] = value;
     });
-    setPhrase(body.phrase);
     setLanguageCode(body.language_code);
     setTranslation(null);
     setIsTranslating(true);
-  };
-
-  const handleChangePhrase = () => {
-    setTranslation(null);
-    setError(null);
   };
 
   const translatePhrase = (phrase, languageCode) => {
@@ -48,25 +42,28 @@ export const TranslationForm = () => {
   };
 
   useEffect(() => {
+    setTranslation(null);
+    setError(null);
+  }, [phrase]);
+
+  useEffect(() => {
     if (!isTranslating) { return; }
     translatePhrase(phrase, languageCode);
   }, [isTranslating]);
 
-  useEffect(() => {
-    console.log('sdds');
-  }, [translation]);
-
   return (
     <div className="flex flex-col items-center mb-10">
-      <form className="w-full flex flex-row justify-center items-center"
-      onChange={handleChangePhrase}
-      onSubmit={handleSubmit}
+      <form className="w-full flex flex-row gap-3 justify-center items-center"
+            onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col items-center">
           <input placeholder="Need new phrase?"
-                 className="text-2xl text-center p-3 mr-4 border-b-2 border-b-amber-500 outline-none text-fuchsia-600 w-full
+                 className="text-2xl text-center p-3  border-b-2 border-b-amber-500 outline-none text-fuchsia-600 w-full
                  focus:drop-shadow-xl transition-all"
                  name="phrase"
+                 value={phrase}
+                 required
+                 onChange={(e) => setPhrase(e.target.value)}
           />
           <div className="flex items-baseline">
             <p className="text-2xl text-center text-fuchsia-600 mt-3">
@@ -74,7 +71,7 @@ export const TranslationForm = () => {
           </div>
         </div>
         <div className="flex flex-col items-center gap-y-5">
-          <LanguageListBox />
+          <LanguageListBox/>
           {translation
             ? <Button icon="add" size="large" color="fuchsia">Add new card</Button>
             : <Button icon="translate" size="large" type="submit">Translate</Button>

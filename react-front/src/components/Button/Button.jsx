@@ -16,10 +16,11 @@ export const Button = ({
   color = 'amber',
   size = 'medium',
   icon = null,
+  isDisabled = false,
   children,
 }) => {
   return (
-    <button className={styles.button}>
+    <button className={styles.button} disabled={isDisabled}>
       <span className={cn(styles.title, {
         [styles.amber]: color === 'amber',
         [styles.fuchsia]: color === 'fuchsia',

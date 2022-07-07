@@ -1,10 +1,11 @@
 import { withLayout } from '../../layout';
 import React from 'react';
+import { Auth } from './Auth';
 
 const RegisterPage = () => {
-  return <>
-    <h1>Register Page</h1>
-  </>;
+  return (
+    <Auth title="Sign Up"/>
+  );
 };
 
 export default withLayout(RegisterPage);

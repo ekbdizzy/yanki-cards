@@ -20,12 +20,18 @@ class WordAPITestCase(APITestCase):
         self.factory = APIRequestFactory()
         self.user = User.objects.create(email='user1@mail.com')
 
-        self.apple_tr = Phrase.objects.create(language='tr', phrase='elma')
-        self.pear_en = Phrase.objects.create(language='en', phrase='pear')
-        self.pear_ru = Phrase.objects.create(language='ru', phrase='груша')
-        self.pear_tr = Phrase.objects.create(language='tr', phrase='armut')
-        self.hello_en = Phrase.objects.create(language='en', phrase='hello')
-        self.hello_tr = Phrase.objects.create(language='tr', phrase='merhaba')
+        self.apple_tr = Phrase.objects.create(language_code='tr', phrase='elma')
+        self.pear_en = Phrase.objects.create(language_code='en', phrase='pear')
+        self.pear_ru = Phrase.objects.create(language_code='ru', phrase='груша')
+        self.pear_tr = Phrase.objects.create(language_code='tr', phrase='armut')
+        self.hello_en = Phrase.objects.create(
+            language_code='en',
+            phrase='hello',
+        )
+        self.hello_tr = Phrase.objects.create(
+            language_code='tr',
+            phrase='merhaba',
+        )
 
         self.translations_stack_single = TranslationsStack.objects.create(
             user=self.user,
@@ -46,7 +52,7 @@ class WordAPITestCase(APITestCase):
     def test_get_translation_view(self, translate_phrase, get_token):
 
         url = reverse('word-translate')
-        phrase = {"phrase": "яблоко", "language": "en"}
+        phrase = {"phrase": "яблоко", "language_code": "en"}
         expected_response = [{"text": "apple", "detectedLanguageCode": "ru"}]
         translate_phrase.return_value = expected_response
 
@@ -60,8 +66,8 @@ class WordAPITestCase(APITestCase):
 
         # stack does not exists:
         phrases_request = [
-            {"phrase": "яблоко", "language": "ru"},
-            {"phrase": "apple", "language": "en"},
+            {"phrase": "яблоко", "language_code": "ru"},
+            {"phrase": "apple", "language_code": "en"},
         ]
         response = self.client.post(
             url,
@@ -69,8 +75,8 @@ class WordAPITestCase(APITestCase):
             content_type='application/json',
         )
         phrases = [
-            Phrase.objects.filter(phrase='apple', language='en').first(),
-            Phrase.objects.filter(phrase='яблоко', language='ru').first(),
+            Phrase.objects.filter(phrase='apple', language_code='en').first(),
+            Phrase.objects.filter(phrase='яблоко', language_code='ru').first(),
         ]
         self.assertTrue(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(all(phrases))
@@ -83,8 +89,8 @@ class WordAPITestCase(APITestCase):
 
         # there is only one stack:
         phrases_request = [
-            {"phrase": "груша", "language": "ru"},
-            {"phrase": "pear", "language": "en"},
+            {"phrase": "груша", "language_code": "ru"},
+            {"phrase": "pear", "language_code": "en"},
         ]
         self.assertTrue(TranslationsStack.objects.all().count(), 3)
         response = self.client.post(
@@ -104,8 +110,8 @@ class WordAPITestCase(APITestCase):
 
         # there are more than one stack:
         phrases_request = [
-            {"phrase": "привет", "language": "ru"},
-            {"phrase": "hello", "language": "en"},
+            {"phrase": "привет", "language_code": "ru"},
+            {"phrase": "hello", "language_code": "en"},
         ]
         self.assertTrue(TranslationsStack.objects.all().count(), 3)
         response = self.client.post(
@@ -123,7 +129,7 @@ class WordAPITestCase(APITestCase):
         ).first()
         self.assertTrue(translations_stack)
         self.assertTrue(
-            Phrase.objects.filter(phrase="привет", language="ru").first(),
+            Phrase.objects.filter(phrase="привет", language_code="ru").first(),
         )
         self.assertEqual(translations_stack.phrases.count(), 3)
 

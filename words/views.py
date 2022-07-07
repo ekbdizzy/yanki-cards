@@ -19,25 +19,21 @@ from .serializers import PhraseSerializer, TranslationsStackSerializer
 from .yandex_services import get_yandex_token, translate_phrase
 
 
-def parse_language_code(word: str) -> str:
-    """If contains cyrillic - return 'ru', else 'en'."""
-    # TODO add parsing of cyrillic letters
-    return 'en'
-
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def get_translation_view(request):
-    """Translate word and return translation."""
+    """Translate word and return translation.
+    :phrase: Phrase or word on any available language
+    :language_code: destination language code: en | ru | tr."""
     serializer = PhraseSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     phrase = serializer.validated_data.get('phrase')
+    language_code = serializer.validated_data.get('language_code')
     token = get_yandex_token(settings.YA_OAUTH_TOKEN)
     translation = translate_phrase(
         token=token,
         phrase=phrase,
-        #  FIXME setup language
-        language_code=parse_language_code(phrase),
+        language_code=language_code,
     )
     return Response(translation)
 
@@ -140,7 +136,9 @@ def get_anki_cards_view(request):
     )
     pairs = []
     for stack in translations_stacks:
-        phrases = stack.phrases.filter(Q(language=lang1) | Q(language=lang2))
+        phrases = stack.phrases.filter(
+            Q(language_code=lang1) | Q(language_code=lang2),
+        )
         phrases_pair = [phrase.phrase for phrase in phrases]
         if len(phrases_pair) == 2:
             pairs.append(phrases_pair)

@@ -12,7 +12,7 @@ class PhraseTranslationInlines(admin.TabularInline):
 @admin.register(Phrase)
 class PhraseAdmin(admin.ModelAdmin):
 
-    list_filter = ('language',)
+    list_filter = ('language_code',)
     search_fields = ('phrase',)
 
     class Meta:
@@ -24,7 +24,7 @@ class TranslationsStackAdmin(admin.ModelAdmin):
 
     raw_id_fields = ('phrases',)
     search_fields = ('phrases',)
-    list_filter = ('phrases__language',)
+    list_filter = ('phrases__language_code',)
     inlines = [PhraseTranslationInlines]
 
     class Meta:

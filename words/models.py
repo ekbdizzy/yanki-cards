@@ -13,15 +13,15 @@ class Phrase(models.Model):
     )
 
     phrase = models.CharField('phrase', max_length=60, db_index=True)
-    language = models.CharField(
-        'Language',
+    language_code = models.CharField(
+        'Language_code',
         choices=LANGUAGES,
         max_length=2,
-        default='ru',
+        default='en',
     )
 
     def __str__(self):
-        return f"{self.phrase}: {self.language}"
+        return f"{self.phrase}: {self.language_code}"
 
 
 class TranslationsStack(models.Model):

@@ -10,7 +10,6 @@ const URLS = {
   },
   profile: '/profile/',
   words: '/words/',
-
 };
 
 const API = {
